@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="page-header d-flex align-items-center" style="background-image: url('');">
+        <div class="container position-relative">
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 text-center">
+              <h2>Blog Details</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav>
+        <div class="container">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li>Blog Details</li>
+          </ol>
+        </div>
+      </nav>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Details Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row g-5">
+
+          <div class="col-lg-8">
+
+            <article class="blog-details">
+
+              <div class="post-img">
+                <img src="{% static 'assets/img/blog/pregnacy.avif' %}" alt="" class="img-fluid">
+              </div>
+
+              <h2 class="title">Understanding Pregnancy Care: What to Expect.</h2>
+
+              <div class="meta-top">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">Dr Jackie Mulunda</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2025</time></a></li>
+                </ul>
+              </div><!-- End meta top -->
+
+              <div class="content">
+                <p>
+      Pregnancy is a life-changing journey that requires both emotional and physical care.
+      Understanding what to expect during this period can help reduce anxiety and ensure
+      a healthy experience for both the mother and the baby.
+    </p>
+
+    <h2>1. Regular Prenatal Visits</h2>
+    <p>
+      From the moment pregnancy is confirmed, regular checkups with a healthcare provider
+      are essential. These visits monitor the baby's development, check the mother’s health,
+      and identify any potential risks early.
+    </p>
+
+    <h2>2. Healthy Lifestyle Choices</h2>
+    <p>
+      Proper nutrition, regular exercise, and enough sleep are key during pregnancy.
+      Avoiding alcohol, tobacco, and certain medications is critical to the baby’s development.
+      Prenatal vitamins, especially those containing folic acid and iron, are commonly recommended.
+    </p>
+
+    <h2>3. Emotional Wellbeing</h2>
+    <p>
+      Pregnancy can bring a mix of emotions, from excitement to anxiety. It’s important to
+      talk about feelings with a partner, support group, or counselor. Mental health is just
+      as important as physical health.
+    </p>
+
+    <h2>4. Preparing for Birth</h2>
+    <p>
+      As the due date approaches, expectant parents should learn about the birth process,
+      explore birthing options, and create a birth plan. Attending prenatal classes can
+      provide valuable guidance and confidence.
+    </p>
+
+    <h2>5. Postnatal Planning</h2>
+    <p>
+      Care doesn’t end at birth. Understanding postnatal care, breastfeeding, and infant
+      needs is crucial for a smooth transition into parenthood.
+    </p>
+
+              </div><!-- End post content -->
+
+
+            </article><!-- End blog post -->
+
+
+          </div>
+
+          <div class="col-lg-4">
+
+            <div class="sidebar">
+
+
+              <div class="sidebar-item recent-posts">
+                <h3 class="sidebar-title">Recent Posts</h3>
+
+                <div class="mt-3">
+
+                  <div class="post-item mt-3">
+                    <img src="{% static 'assets/img/blog/menstraul.avif' %}" alt="">
+                    <div>
+                      <h4><a href="blog-details.html">Managing Menstrual Health and Disorders</a></h4>
+                      <time datetime="2020-01-01">Jan 1, 2025</time>
+                    </div>
+                  </div><!-- End recent post item-->
+
+                  <div class="post-item">
+                    <img src="{% static 'assets/img/blog/checkup.webp' %}" alt="">
+                    <div>
+                      <h4><a href="blog-details.html">Importance of Regular Women's Health Screenings</a></h4>
+                      <time datetime="2020-01-01">Jan 1, 2025</time>
+                    </div>
+                  </div><!-- End recent post item-->
+
+
+                </div>
+
+              </div><!-- End sidebar recent posts-->
+
+
+            </div><!-- End Blog Sidebar -->
+
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Blog Details Section -->
+
+  </main><!-- End #main -->
+
+{% endblock content %}

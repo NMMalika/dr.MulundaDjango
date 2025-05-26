@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+        <title>Dr. Jackie Mulunda</title>
+        <meta name="description" content="Dr. Jackline Mulunda is a trusted gynecologist in Kisii, Kenya, offering expert women's health care and fertility services. Recognized as one of the best doctors in the Nyanza region." />
+        <meta name="keywords" content="Gynecologist in Kisii, Dr. Jackline Mulunda, best doctor in Nyanza, women's health Kisii, fertility clinic Kenya, Kisii gynecology services, OB-GYN Nyanza" />
+        <meta name="author" content="NimCity Tech Enterprises" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content="index, follow">
+
+        <!-- Favicons -->
+        <link href="{% static 'assets/img/favicon.ico' %}" rel="icon" />
+        <link href="{% static 'assets/img/favicon.ico' %}" rel="apple-touch-icon" />       
+
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Icon Font Stylesheet -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+
+        <!-- Vendor CSS Files -->
+        <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet" />
+
+        <!-- Template Main CSS File -->
+        <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" />
+    </head>
+
+    <body>
+        <!-- ======= Header ======= -->
+        <div class="fixed-top" style="z-index: 1030;">
+            <!-- you can move z-index to CSS -->
+
+            <!-- ======= Topbar ======= -->
+            <div class="container-fluid bg-light ps-5 pe-0 d-none d-lg-block">
+                <div class="row gx-0">
+                    <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
+                        <div class="d-inline-flex align-items-center">
+                            <small class="py-2">
+                                <i class="far fa-clock text-primary me-2"></i>
+                                Opening Hours: Mon - Fri : 6.00 am - 10.00 pm, Sunday Closed
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center text-lg-end">
+                        <div class="position-relative d-inline-flex align-items-center bg-primary text-white top-shape px-5">
+                            <div class="me-3 pe-3 border-end py-2">
+                                <p class="m-0"><i class="fa fa-envelope-open me-2"></i>info@drjackiethegyna.com</p>
+                            </div>
+                            <div class="me-3 pe-3 border-end py-2">
+                                <p class="m-0">
+                                    <i class="fa fa-phone-alt me-2"></i>
+                                    <a href="tel:+254735319848" style="text-decoration: none; color: inherit;">+254735319848</a>
+                                </p>
+                            </div>
+                            <div class="d-inline-flex align-items-center py-2">
+                                <a class="text-white me-3" href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a class="text-white me-3" href="#"><i class="fab fa-twitter"></i></a>
+                                <a class="text-white" href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======= End Topbar ======= -->
+
+            <!-- ======= Navbar ======= -->
+            <header id="header" class="header d-flex align-items-center" style="background: #;">
+                <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+                    <a href="index.html" class="logo d-flex align-items-center">
+                        <h1>Dr.Jackie<span>.</span></h1>
+                    </a>
+                    <nav id="navbar" class="navbar">
+                        <ul>
+                            <li><a href="index.html">Home</a></li>
+                            <li><a href="index.html#services">Services</a></li>
+                            <li><a href="index.html#testimonials">Testimonials</a></li>
+                            <li><a href="index.html#faq">FAQ</a></li>
+                            <li><a href="blog.html">Blog</a></li>
+                            <li><a href="index.html#contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+                    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+                </div>
+            </header>
+            <!-- ======= End Navbar ======= -->
+        </div>
+
+        <!-- End Header -->
+
+        <!-- ======= main Section ======= -->
+        
+        
+            {% block content %}
+
+            {% endblock content%}
+        <!-- End #main -->
+
+        <!-- ======= Footer ======= -->
+        <footer id="footer" class="footer">
+            <div class="container mt-4">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>Impact</span></strong>. All Rights Reserved
+                </div>
+                <div class="credits">Designed by <a href="">NimCity Tech Enterprises</a></div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+       
+
+        <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+        <div id="preloader"></div>
+
+        <!-- Vendor JS Files -->
+        <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+        <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+        <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+        <!-- Template Main JS File -->
+        <script src="{% static 'assets/js/main.js' %}"></script>
+    </body>
+</html>

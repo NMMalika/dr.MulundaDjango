@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Form Submission</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        strong {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <h2 style="color: #2e6c80;">New Inquiry from Dr Jackie</h2>
+        <p><strong>Name:</strong> {{ name }}</p>
+        <p><strong>Email:</strong> {{ email }}</p>
+        <p><strong>Phone:</strong> {{ phone_number}}</p>
+        <p><strong>Location:</strong> {{ location }}</p>
+        <p><strong>Subject:</strong> {{subject }}</p>
+        <p><strong>Message:</strong></p>
+        <p style="border-left: 3px solid #ccc; padding-left: 10px; color: #333;">{{ message }}</p>
+    </div>
+</body>
+</html>
