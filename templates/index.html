@@ -23,7 +23,7 @@
             </div>
         </section>
         <!-- End Hero Section -->
-        <section class="booking-section overlap-hero">
+        <section id="booking-section" class="booking-section overlap-hero">
             <div class="container">
                 <div class="row g-4 align-items-stretch">
                     <!-- Opening Hours -->
@@ -67,29 +67,30 @@
                                 <i class="fa fa-heartbeat text-primary fs-4"></i>
                                 <hr class="mx-auto" style="width: 60px; border: 2px solid #3498db;" />
                             </div>
-                            <form>
+                            <form  action="{% url 'booking-section' %}" method="POST">
+                                {% csrf_token %}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="input-group form-group">
                                             <span class="input-group-text"><i class="fa fa-user"></i></span>
-                                            <input type="text" class="form-control" placeholder="Your Name" />
+                                            <input type="text" class="form-control" name="name" placeholder="Your Name" />
                                         </div>
                                         <div class="input-group form-group">
                                             <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                                            <input type="tel" class="form-control" placeholder="Phone Number" />
+                                            <input type="tel" class="form-control" name="phone" placeholder="Phone Number" />
                                         </div>
                                         <div class="input-group form-group">
                                             <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-                                            <input type="email" class="form-control" placeholder="Email" />
+                                            <input type="email" class="form-control" name="email" placeholder="Email" />
                                         </div>
                                         <div class="input-group form-group">
                                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                            <input type="text" class="form-control" placeholder="15/05/2025" />
+                                            <input type="text" class="form-control" name="date" placeholder="15/05/2025" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <textarea class="form-control" placeholder="Note"></textarea>
+                                            <textarea class="form-control" name="note" placeholder="Note"></textarea>
                                         </div>
                                         <br/>
                                         <div class="text-end">

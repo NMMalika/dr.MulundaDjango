@@ -461,6 +461,19 @@ section {
     left: 100%;
     visibility: visible;
   }
+    .book-btn {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+  
+    .book-btn:hover {
+      background-color:palevioletred;
+      transform: scale(1.05);
+    }
 }
 
 @media (min-width: 1280px) and (max-width: 1366px) {

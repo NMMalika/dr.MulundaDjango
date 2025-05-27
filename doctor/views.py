@@ -4,9 +4,27 @@ from django.views.generic import TemplateView
 from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.contrib import messages
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
+    template_name = 'index.html'
+
+class AppointmentTemplateView(TemplateView):
+    template_name = 'index.html'
+    
+    def post(self,request):
+        name=request.POST.get('name')
+        phone=request.POST.get('phone')
+        email=request.POST.get('email')
+        date=request.POST.get('date')
+        message=request.POST.get('note')
+        
+        messages.add_message(request, messages.SUCCESS, 'Your appointment request has been sent successfully!')
+        return HttpResponse("Appointment request sent successfully!")
+        
+
+class ContactTemplateView(TemplateView):
     template_name = 'index.html'
 
     def post(self,request):

@@ -87,12 +87,18 @@
                     </a>
                     <nav id="navbar" class="navbar">
                         <ul>
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{% url 'home' %}">Home</a></li>
                             <li><a href="index.html#services">Services</a></li>
                             <li><a href="index.html#testimonials">Testimonials</a></li>
                             <li><a href="index.html#faq">FAQ</a></li>
                             <li><a href="blog.html">Blog</a></li>
-                            <li><a href="index.html#contact">Contact</a></li>
+                            <li><a href="{% url 'home' %}#contact">Contact</a></li>
+                            <li>
+                                <a href="{% url 'home' %}#booking-section" class="book-btn" style="padding: 8px 16px; background-color: #007bff; color: white; border-radius: 4px; text-decoration: none;">
+                                    <i class="fas fa-calendar"></i> 
+                                    Book Appointment
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                     <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
