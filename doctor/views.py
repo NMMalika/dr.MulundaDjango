@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib import messages
+from .models import Appointment
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
@@ -20,9 +21,17 @@ class AppointmentTemplateView(TemplateView):
         date=request.POST.get('date')
         message=request.POST.get('note')
         
-        messages.add_message(request, messages.SUCCESS, 'Your appointment request has been sent successfully!')
-        return HttpResponse("Appointment request sent successfully!")
-        
+        appointment= Appointment.objects.create(
+            name=name,
+            phone=phone,
+            email=email,
+            date=date,
+            message=message
+        )
+        appointment.save()
+
+        messages.add_message(request, messages.SUCCESS, f"Thanks {name} for your appointment request. We will get back to you soon.")
+        return redirect ('booking-section')
 
 class ContactTemplateView(TemplateView):
     template_name = 'index.html'
