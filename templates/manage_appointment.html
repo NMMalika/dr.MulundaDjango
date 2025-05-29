@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: pink;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 4rem auto 2rem auto;  /* top space increased */
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        padding: 1.5rem;
+        transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card h3 {
+        margin-top: 0;
+        color: #007BFF;
+    }
+
+    .card p {
+        margin: 0.5rem 0;
+        color: #333;
+    }
+
+    .note {
+        font-style: italic;
+        color: #555;
+    }
+    .note-box {
+        background-color:rgba(236, 6, 6, 0.09);
+        border-left: 4px solid #007BFF;
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 6px;
+        font-style: italic;
+        color: #444;
+    }
+</style>
+</head>
+<body>
+
+<main style="padding-top: 80px;"> <!-- adjust px as needed -->
+    <h1 style="text-align: center; margin-top: 100px;">Appointments</h1>
+<div class="container">
+ {% for appointment in appointments %}
+ <div class="card">
+    <h3>{{ appointment.name }}</h3>
+    <p><strong>Email:</strong> {{ appointment.email }}</p>
+    <p><strong>Phone:</strong> {{ appointment.phone }}</p>
+    <p><strong>Date:</strong> {{ appointment.date }}</p>
+    <div class="note-box">
+        <strong>Note:</strong>
+        <p>{{ appointment.message }}</p>
+    </div>
+ </div>
+{% empty %}
+<p>No appointments found.</p>
+{% endfor %}
+</div>
+</main>       
+            
+                            
+{% endblock content%}
+  
