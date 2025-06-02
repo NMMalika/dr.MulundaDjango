@@ -7,7 +7,7 @@
     /* General body styling - adjust as needed */
     body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4; /* Light grey background like in the target image */
+        background-color: pink; 
         margin: 0;
         padding: 0;
     }
@@ -132,7 +132,7 @@
     }
 
     .btn-accept {
-        background-color: #FF8C00; /* Orange */
+        background-color:rgb(81, 255, 0); /* Orange */
         color: white;
     }
     .btn-accept:hover {
@@ -152,7 +152,7 @@
         color: white;
     }
     .btn-reschedule:hover {
-        background-color: #2980b9;
+        background-color:rgb(41, 185, 72);
     }
 
     /* Pagination styling (basic, adapt to your framework or custom needs) */
@@ -169,7 +169,7 @@
     .pagination .page-link {
         padding: 8px 12px;
         border: 1px solid #ddd;
-        color: #FF8C00; /* Orange to match accept button theme */
+        color:rgb(255, 0, 157); /* Orange to match accept button theme */
         text-decoration: none;
         border-radius: 4px;
     }
@@ -179,9 +179,9 @@
         border-color: #eee;
     }
     .pagination .page-item.active .page-link { /* You might need to add 'active' class in Django view for current page */
-        background-color: #FF8C00;
+        background-color:rgb(102, 255, 0);
         color: white;
-        border-color: #FF8C00;
+        border-color:rgb(87, 253, 10);
     }
 
 
@@ -194,24 +194,27 @@
 </style>
 
 <main>
-    <h1 class="appointments-title">Manage appointments</h1>
+    <h1 class="appointments-title"> Manage appointments</h1>
     <div class="appointments-container">
         {% for appointment in appointments %}
         <div class="appointment-card">
             <h3 class="card-name">{{ appointment.name }}</h3>
             <div class="contact-info-flex">
                 <div class="date-display">
+                    <p>appointment date</p>
                     <span class="date-day">{{ appointment.date|date:"d" }}</span>
                     <span class="date-month">{{ appointment.date|date:"M"|upper }}</span>
+                    <span class="date-year">{{ appointment.date|date:"Y"|upper }}</span>
                 </div>
                 <div class="details">
                     <p class="email-text">{{ appointment.email }}</p>
                     <p class="phone-text">{{ appointment.phone }}</p>
+                    <p class="created-at-text">Created at: {{ appointment.created_at|date:"d M Y H:i" }}</p>
                 </div>
             </div>
             <p class="description-text">{{ appointment.message|default:"No message provided."|truncatewords:25 }}</p>
             <div class="reschedule-input-container">
-                <input type="text" placeholder="mm/dd/yyyy" class="reschedule-date-input" name="reschedule_date_{{ appointment.id }}">
+                <input type="text" placeholder="more information" class="reschedule-date-input" name="reschedule_date_{{ appointment.id }}">
                 {# Consider type="date" for better UX: <input type="date" class="reschedule-date-input"> #}
             </div>
             <div class="action-buttons-container">
@@ -229,43 +232,77 @@
     </div>
 
     {% if is_paginated %}
+
     <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
-                    &laquo; Previous
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">&laquo; Previous</span>
-            </li>
-            {% endif %}
-
-            {# Optional: Render page numbers - this part is not in your original but often useful #}
-            {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} {# Show a few pages around current #}
-                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a></li>
-                {% endif %}
-            {% endfor %}
-
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
-                    Next &raquo;
-                </a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next &raquo;</span>
-            </li>
-            {% endif %}
-        </ul>
+    
+    <ul class="pagination">
+    
+    
+    
+    {% if page_obj.has_previous %}
+    
+    <li class="page-item">
+    
+    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+    
+    &laquo; Previous
+    
+    </a>
+    
+    </li>
+    
+    {% else %}
+    
+    <li class="page-item disabled">
+    
+    <span class="page-link">&laquo; Previous</span>
+    
+    </li>
+    
+    {% endif %}
+    
+    
+    
+    <li class="page-item disabled">
+    
+    <span class="page-link">
+    
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    
+    </span>
+    
+    </li>
+    
+    
+    
+    {% if page_obj.has_next %}
+    
+    <li class="page-item">
+    
+    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+    
+    Next &raquo;
+    
+    </a>
+    
+    </li>
+    
+    {% else %}
+    
+    <li class="page-item disabled">
+    
+    <span class="page-link">Next &raquo;</span>
+    
+    </li>
+    
+    {% endif %}
+    
+    
+    
+    </ul>
+    
     </nav>
+    
     {% endif %}
 </main>
 {% endblock content%}
