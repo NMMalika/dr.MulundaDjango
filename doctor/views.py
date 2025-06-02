@@ -6,6 +6,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib import messages
 from .models import Appointment
+from django.views.generic import ListView
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
@@ -77,19 +78,21 @@ class ContactTemplateView(TemplateView):
         email_message.send()
 
         return HttpResponse("Email sent successfully!")
-class ManageAppointmentTemplateView(TemplateView):
-    template_name = 'manage_appointment.html'
-    login_required = True
     
+class ManageAppointmentTemplateView(ListView):
+    template_name = 'manage_appointment.html'
+    model = Appointment
+    context_object_name = 'appointments'
+    paginate_by = 3
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['appointments'] = Appointment.objects.all()
         context.update({
-            
             'title': 'Manage Appointments',
             'description': 'View and manage all appointments.',
         })
         return context
+
        
     
    
