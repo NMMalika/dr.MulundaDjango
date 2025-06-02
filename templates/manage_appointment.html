@@ -3,124 +3,270 @@
 
 
 {% block content %}
-
 <style>
+    /* General body styling - adjust as needed */
     body {
         font-family: Arial, sans-serif;
-        background: pink;
+        background-color: #f4f4f4; /* Light grey background like in the target image */
         margin: 0;
         padding: 0;
     }
 
-    .container {
-        max-width: 1200px;
-        margin: 4rem auto 2rem auto;  /* top space increased */
-        padding: 1rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
+    main {
+        padding-top: 20px; /* Reduced padding-top for the main content area */
     }
 
-    .card {
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        padding: 1.5rem;
-        transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-    .card h3 {
-        margin-top: 0;
-        color: #007BFF;
-    }
-
-    .card p {
-        margin: 0.5rem 0;
+    h1.appointments-title {
+        text-align: center;
+        margin-top: 40px; /* Adjusted margin */
+        margin-bottom: 40px;
         color: #333;
+        font-weight: 600;
     }
 
-    .note {
-        font-style: italic;
-        color: #555;
+    .appointments-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Responsive columns */
+        gap: 25px; /* Space between cards */
+        padding: 0 20px; /* Padding for the container */
+        max-width: 1200px; /* Max width for the container */
+        margin: 0 auto; /* Center the container */
     }
-    .note-box {
-        background-color:rgba(236, 6, 6, 0.09);
-        border-left: 4px solid #007BFF;
+
+    .appointment-card {
+        background-color: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-name {
+        font-size: 1.25em; /* e.g., selmi selmi */
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .contact-info-flex {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 15px;
+    }
+
+    .date-display {
+        background-color: #EBF4FF; /* Light blue background for date */
+        color: #4A90E2; /* Blue color for date text */
+        border-radius: 4px;
+        padding: 8px 10px;
+        text-align: center;
+        margin-right: 15px;
+        min-width: 50px; /* Ensure consistent width */
+    }
+
+    .date-day {
+        display: block;
+        font-size: 1.4em;
+        font-weight: bold;
+    }
+
+    .date-month {
+        display: block;
+        font-size: 0.8em;
+        text-transform: uppercase;
+    }
+
+    .details {
+        font-size: 0.9em;
+        color: #555;
+        line-height: 1.5;
+    }
+    .details p {
+        margin: 2px 0;
+    }
+    .email-text, .phone-text {
+        word-break: break-all; /* Prevent long emails/phones from breaking layout */
+    }
+
+
+    .description-text {
+        font-size: 0.9em;
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 15px;
+        flex-grow: 1; /* Allows description to take available space */
+    }
+
+    .reschedule-input-container {
+        margin-bottom: 15px;
+    }
+
+    .reschedule-date-input {
+        width: 100%;
         padding: 10px;
-        margin-top: 15px;
-        border-radius: 6px;
-        font-style: italic;
-        color: #444;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box; /* Important for width calculation */
+        font-size: 0.9em;
+    }
+
+    .action-buttons-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+        gap: 10px;
+    }
+
+    .btn-action {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+
+    .btn-accept {
+        background-color: #FF8C00; /* Orange */
+        color: white;
+    }
+    .btn-accept:hover {
+        background-color: #e67e00;
+    }
+
+    .btn-reject {
+        background-color: #E74C3C; /* Red */
+        color: white;
+    }
+    .btn-reject:hover {
+        background-color: #c0392b;
+    }
+
+    .btn-reschedule {
+        background-color: #3498DB; /* Blue */
+        color: white;
+    }
+    .btn-reschedule:hover {
+        background-color: #2980b9;
+    }
+
+    /* Pagination styling (basic, adapt to your framework or custom needs) */
+    .pagination {
+        list-style: none;
+        padding: 0;
+        display: flex; /* Added for consistency with your existing pagination */
+        justify-content: center; /* Added for consistency */
+        margin-top: 20px; /* Added for consistency */
+    }
+    .pagination .page-item {
+        margin: 0 3px;
+    }
+    .pagination .page-link {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        color: #FF8C00; /* Orange to match accept button theme */
+        text-decoration: none;
+        border-radius: 4px;
+    }
+    .pagination .page-item.disabled .page-link {
+        color: #aaa;
+        pointer-events: none;
+        border-color: #eee;
+    }
+    .pagination .page-item.active .page-link { /* You might need to add 'active' class in Django view for current page */
+        background-color: #FF8C00;
+        color: white;
+        border-color: #FF8C00;
+    }
+
+
+    /* Responsive adjustments for cards if needed, though auto-fill helps */
+    @media (max-width: 768px) {
+        .appointments-container {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        }
     }
 </style>
-</head>
-<body>
 
-<main style="padding-top: 80px;"> <!-- adjust px as needed -->
-    <h1 style="text-align: center; margin-top: 100px;">Appointments</h1>
-<div class="container">
- {% for appointment in appointments %}
- <div class="card">
-    <h3>{{ appointment.name }}</h3>
-    <p><strong>Email:</strong> {{ appointment.email }}</p>
-    <p><strong>Phone:</strong> {{ appointment.phone }}</p>
-    <p><strong>Date:</strong> {{ appointment.date }}</p>
-    <p><strong>Created At:</strong> {{ appointment.created_at }}</p>
-    <div class="note-box">
-        <strong>Note:</strong>
-        <p>{{ appointment.message }}</p>
+<main>
+    <h1 class="appointments-title">Manage appointments</h1>
+    <div class="appointments-container">
+        {% for appointment in appointments %}
+        <div class="appointment-card">
+            <h3 class="card-name">{{ appointment.name }}</h3>
+            <div class="contact-info-flex">
+                <div class="date-display">
+                    <span class="date-day">{{ appointment.date|date:"d" }}</span>
+                    <span class="date-month">{{ appointment.date|date:"M"|upper }}</span>
+                </div>
+                <div class="details">
+                    <p class="email-text">{{ appointment.email }}</p>
+                    <p class="phone-text">{{ appointment.phone }}</p>
+                </div>
+            </div>
+            <p class="description-text">{{ appointment.message|default:"No message provided."|truncatewords:25 }}</p>
+            <div class="reschedule-input-container">
+                <input type="text" placeholder="mm/dd/yyyy" class="reschedule-date-input" name="reschedule_date_{{ appointment.id }}">
+                {# Consider type="date" for better UX: <input type="date" class="reschedule-date-input"> #}
+            </div>
+            <div class="action-buttons-container">
+                {# You'll need to wrap these in forms or use JavaScript to handle actions #}
+                <button type="button" class="btn-action btn-accept" data-id="{{ appointment.id }}">Accept</button>
+                <button type="button" class="btn-action btn-reject" data-id="{{ appointment.id }}">Reject</button>
+                <button type="button" class="btn-action btn-reschedule" data-id="{{ appointment.id }}">Reschedule</button>
+            </div>
+        </div>
+        {% empty %}
+        <div style="text-align: center; grid-column: 1 / -1;">
+            <p>No appointments found.</p>
+        </div>
+        {% endfor %}
     </div>
- </div>
- 
 
-{% empty %}
-<p>No appointments found.</p>
-{% endfor %}
-</div>
-{% if is_paginated %}
-  <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
-    <ul class="pagination">
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                    &laquo; Previous
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">&laquo; Previous</span>
+            </li>
+            {% endif %}
 
-      {% if page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
-            &laquo; Previous
-          </a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">&laquo; Previous</span>
-        </li>
-      {% endif %}
+            {# Optional: Render page numbers - this part is not in your original but often useful #}
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} {# Show a few pages around current #}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
 
-      <li class="page-item disabled">
-        <span class="page-link">
-          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </span>
-      </li>
 
-      {% if page_obj.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
-            Next &raquo;
-          </a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">Next &raquo;</span>
-        </li>
-      {% endif %}
-
-    </ul>
-  </nav>
-{% endif %}
-
-</main>       
-            
-                            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                    Next &raquo;
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next &raquo;</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</main>
 {% endblock content%}
   
