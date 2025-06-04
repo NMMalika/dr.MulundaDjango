@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from .models import Appointment
 from django.views.generic import ListView
+from django.core.paginator import Paginator
+from django.views import View
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
@@ -79,20 +81,30 @@ class ContactTemplateView(TemplateView):
 
         return HttpResponse("Email sent successfully!")
     
-class ManageAppointmentTemplateView(ListView):
+class ManageAppointmentView(View):
     template_name = 'manage_appointment.html'
-    model = Appointment
-    context_object_name = 'appointments'
-    paginate_by = 3
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
+    def get(self, request):
+        appointments = Appointment.objects.all().order_by('-created_at')
+        paginator = Paginator(appointments, 3)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {
+            'appointments': page_obj,
+            'is_paginated': page_obj.has_other_pages(),
+            'page_obj': page_obj,
             'title': 'Manage Appointments',
             'description': 'View and manage all appointments.',
         })
-        return context
 
-       
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action_type')
+        appointment_id = request.POST.get('appointment_id')
+        message = request.POST.get('message')
+        
+        # handle your message sending or appointment updating here
+        return redirect('manage_appointment')
+      
     
    

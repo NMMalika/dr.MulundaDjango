@@ -250,3 +250,22 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+document.addEventListener("DOMContentLoaded", function () {
+  const buttons = document.querySelectorAll('[data-bs-target="#actionModal"]');
+  const modal = document.getElementById("actionModal");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const name = this.getAttribute("data-name");
+      const date = this.getAttribute("data-date");
+      const action = this.getAttribute("data-action");
+      const appointmentId = this.getAttribute("data-id");
+
+      document.getElementById("modalAction").value = action;
+      document.getElementById("modalAppointmentId").value = appointmentId;
+      document.getElementById(
+        "modalMessage"
+      ).value = `Hi ${name}, your appointment on ${date} has been ${action.toLowerCase()}.`;
+    });
+  });
+});

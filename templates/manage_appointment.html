@@ -95,10 +95,16 @@
 
     .description-text {
         font-size: 0.9em;
-        color: #666;
         line-height: 1.6;
         margin-bottom: 15px;
         flex-grow: 1; /* Allows description to take available space */
+        background-color:rgba(236, 6, 6, 0.09);
+        border-left: 4px solid #007BFF;
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 6px;
+        font-style: italic;
+        color: #444;
     }
 
     .reschedule-input-container {
@@ -213,15 +219,40 @@
                 </div>
             </div>
             <p class="description-text">{{ appointment.message|default:"No message provided."|truncatewords:25 }}</p>
-            <div class="reschedule-input-container">
-                <input type="text" placeholder="more information" class="reschedule-date-input" name="reschedule_date_{{ appointment.id }}">
-                {# Consider type="date" for better UX: <input type="date" class="reschedule-date-input"> #}
-            </div>
+            
             <div class="action-buttons-container">
-                {# You'll need to wrap these in forms or use JavaScript to handle actions #}
-                <button type="button" class="btn-action btn-accept" data-id="{{ appointment.id }}">Accept</button>
-                <button type="button" class="btn-action btn-reject" data-id="{{ appointment.id }}">Reject</button>
-                <button type="button" class="btn-action btn-reschedule" data-id="{{ appointment.id }}">Reschedule</button>
+                <button type="button"
+                class="btn-action btn-accept"
+                data-bs-toggle="modal"
+                data-bs-target="#actionModal"
+                data-name="{{ appointment.name }}"
+                data-date="{{ appointment.date }}"
+                data-action="Accepted"
+                data-id="{{ appointment.id }}">
+            Accept
+        </button>
+        
+        <button type="button"
+                class="btn-action btn-reject"
+                data-bs-toggle="modal"
+                data-bs-target="#actionModal"
+                data-name="{{ appointment.name }}"
+                data-date="{{ appointment.date }}"
+                data-action="Rejected"
+                data-id="{{ appointment.id }}">
+            Reject
+        </button>
+        
+        <button type="button"
+                class="btn-action btn-reschedule"
+                data-bs-toggle="modal"
+                data-bs-target="#actionModal"
+                data-name="{{ appointment.name }}"
+                data-date="{{ appointment.date }}"
+                data-action="Rescheduled"
+                data-id="{{ appointment.id }}">
+            Reschedule
+        </button>
             </div>
         </div>
         {% empty %}
@@ -229,6 +260,28 @@
             <p>No appointments found.</p>
         </div>
         {% endfor %}
+        <div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form method="post" action="{% url 'manage_appointment' %}">
+                  {% csrf_token %}
+                  <div class="modal-header">
+                    <h5 class="modal-title">Send Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    <input type="hidden" name="action_type" id="modalAction">
+                    <input type="hidden" name="appointment_id" id="modalAppointmentId">
+                    <label for="modalMessage" class="form-label">Message</label>
+                    <textarea name="message" id="modalMessage" class="form-control" rows="4"></textarea>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="modalSubmitButton">Send</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
     </div>
 
     {% if is_paginated %}
@@ -306,4 +359,68 @@
     {% endif %}
 </main>
 {% endblock content%}
-  
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const actionModal = document.getElementById('actionModal');
+      // Get a reference to the modal's submit button
+      const modalSubmitButton = actionModal.querySelector('button[type="submit"]'); // More specific selector
+    
+      if (actionModal) {
+        actionModal.addEventListener('show.bs.modal', function (event) {
+          const button = event.relatedTarget;
+    
+          if (button) {
+            const name = button.getAttribute('data-name');
+            const date = button.getAttribute('data-date');
+            const action = button.getAttribute('data-action'); // "Accepted", "Rejected", "Rescheduled"
+            const appointmentId = button.getAttribute('data-id');
+    
+            console.log('Action:', action); // For debugging
+    
+            // Set hidden input values
+            const modalActionInput = document.getElementById('modalAction');
+            const modalAppointmentIdInput = document.getElementById('modalAppointmentId');
+            const modalMessageTextarea = document.getElementById('modalMessage');
+    
+            if (modalActionInput) modalActionInput.value = action;
+            if (modalAppointmentIdInput) modalAppointmentIdInput.value = appointmentId;
+    
+            // Construct and set the message for the textarea
+            let messageText = `Hi ${name}, your appointment on ${date} has been ${action ? action.toLowerCase() : 'processed'}.`;
+            let submitButtonText = "Send"; // Default text
+            let submitButtonClass = "btn btn-primary"; // Default class
+    
+            // Customize message and button based on the action
+            if (action === "Accepted") {
+              submitButtonText = "Confirm Acceptance";
+              submitButtonClass = "btn btn-success"; // Green for accept
+              // You could also pre-fill a more specific message:
+              // messageText = `Hi ${name}, we're pleased to confirm your appointment on ${date}.`;
+            } else if (action === "Rejected") {
+              submitButtonText = "Confirm Rejection";
+              submitButtonClass = "btn btn-danger"; // Red for reject
+              // messageText = `Hi ${name}, regarding your appointment on ${date}, we unfortunately have to reject it. Reason: [Please add reason]`;
+            } else if (action === "Rescheduled") {
+              submitButtonText = "Confirm Reschedule";
+              submitButtonClass = "btn btn-warning"; // Yellow/Orange for reschedule
+              // messageText = `Hi ${name}, concerning your appointment on ${date}, we'd like to propose a reschedule. Please suggest a new date/time or contact us.`;
+            }
+    
+            if (modalMessageTextarea) {
+                modalMessageTextarea.value = messageText;
+            }
+    
+            // Update the modal's submit button text and class
+            if (modalSubmitButton) {
+                modalSubmitButton.textContent = submitButtonText;
+                modalSubmitButton.className = submitButtonClass; // This will replace all existing classes
+                // If you want to add a class instead of replacing:
+                // modalSubmitButton.classList.remove('btn-primary', 'btn-success', 'btn-danger', 'btn-warning'); // Remove old ones
+                // modalSubmitButton.classList.add(submitButtonClass.split(' ')[1]); // Add the specific color class
+            }
+    
+          }
+        });
+      }
+    });
+    </script>
