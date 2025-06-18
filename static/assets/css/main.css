@@ -2214,3 +2214,23 @@ textarea.form-control {
 .footer .credits a {
   color: #fff;
 }
+.view-toggle-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.view-toggle-btn {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-left: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.view-toggle-btn:hover {
+  background-color: #f0f0f0;
+}
+
