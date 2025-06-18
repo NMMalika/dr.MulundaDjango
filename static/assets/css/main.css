@@ -1140,6 +1140,7 @@ textarea.form-control {
   position: relative;
   background: #fff;
   border-radius: 10px;
+  overflow: hidden;
 }
 
 .testimonials .testimonial-item .testimonial-img {
