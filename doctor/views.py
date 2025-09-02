@@ -9,6 +9,9 @@ from .models import Appointment
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from django.views import View
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
@@ -104,7 +107,45 @@ class ManageAppointmentView(View):
         message = request.POST.get('message')
         
         # handle your message sending or appointment updating here
-        return redirect('manage_appointment')
+        return redirect(request,'admin/doctor/manage_appointments.html')
+    
+
+@method_decorator(staff_member_required, name='dispatch')
+class ManageAppointmentView(View):
+    template_name = 'manage_appointment.html'
+
+    def get(self, request):
+        appointments = Appointment.objects.all().order_by('-created_at')
+        # Your pagination logic is correct
+        paginator = Paginator(appointments, 3) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, self.template_name, {
+            'appointments': page_obj,
+            'is_paginated': page_obj.has_other_pages(),
+            'page_obj': page_obj,
+            'title': 'Manage Appointments',
+        })
+
+    def post(self, request, *args, **kwargs):
+        action = request.POST.get('action_type')
+        appointment_id = request.POST.get('appointment_id')
+        
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            if action == 'accept':
+                appointment.status = 'Accepted' # Assumes you have a 'status' field in your model
+                messages.success(request, f"Appointment for {appointment.name} was accepted.")
+            elif action == 'reject':
+                appointment.status = 'Rejected'
+                messages.error(request, f"Appointment for {appointment.name} was rejected.")
+            appointment.save()
+        except Appointment.DoesNotExist:
+            messages.error(request, "Appointment not found.")
+            
+        # Redirect back to the same management page
+        return redirect('admin:doctor_appointment_changelist')
       
     
    

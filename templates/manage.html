@@ -1,479 +1,392 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Manage Appointments - View Toggle</title>
-    <!-- Font Awesome for icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-    />
-    <style>
-      /* --- Basic Setup & Theme --- */
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #fce4ec; /* Light Pink Background */
-        margin: 0;
-        padding: 20px;
-      }
-      main {
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-      .appointments-title {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-        font-weight: 600;
-      }
+{% extends "base.html" %}
+{% load static %}
 
-      /* --- View Toggle Buttons --- */
-      .view-toggle-container {
-        text-align: right;
-        margin-bottom: 20px;
-      }
-      .view-toggle-btn {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        padding: 8px 15px;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 14px;
-        margin-left: 5px;
-        transition: background-color 0.3s, color 0.3s;
-      }
-      .view-toggle-btn:hover {
-        background-color: #f0f0f0;
-      }
-      /* Style for the active button */
-      .view-toggle-btn.active {
-        background-color: #c2185b; /* Dark Pink */
-        color: #fff;
-        border-color: #c2185b;
-      }
-      .view-toggle-btn .fa-solid {
-        margin-right: 5px;
-      }
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<style>
+  /* --- Basic Setup & Theme --- */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #fce4ec;
+    /* Light Pink Background */
+  }
 
-      /* --- CARD VIEW STYLES (Your Default) --- */
-      .view-cards .appointments-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 25px;
-      }
-      /* Base styles for an item, shared between views */
-      .appointment-item {
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-      }
-      .view-cards .appointment-item {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-      }
-      .view-cards .card-name {
-        font-size: 1.25em;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 15px;
-      }
-      .view-cards .contact-info-flex {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #f0f0f0;
-        padding-bottom: 15px;
-      }
-      .view-cards .date-display {
-        background-color: #ebf4ff;
-        color: #4a90e2;
-        border-radius: 4px;
-        padding: 8px 10px;
-        text-align: center;
-        margin-right: 15px;
-        min-width: 50px;
-      }
-      .view-cards .date-day {
-        display: block;
-        font-size: 1.4em;
-        font-weight: bold;
-      }
-      .view-cards .date-month {
-        display: block;
-        font-size: 0.8em;
-        text-transform: uppercase;
-      }
-      .view-cards .date-year {
-        display: block;
-        font-size: 0.8em;
-        text-transform: uppercase;
-      }
-      .view-cards .details {
-        font-size: 0.9em;
-        color: #555;
-        line-height: 1.5;
-      }
-      .view-cards .details p {
-        margin: 2px 0;
-      }
-      .view-cards .description-text {
-        font-size: 0.9em;
-        color: #666;
-        line-height: 1.6;
-        margin-bottom: 15px;
-        flex-grow: 1;
-        background-color: rgba(236, 6, 6, 0.09);
-        border-left: 4px solid #ad1457;
-        padding: 10px;
-        margin-top: 15px;
-        border-radius: 6px;
-      }
-      .view-cards .action-buttons-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 10px;
-      }
-      .btn-action {
-        /* Shared button style */
-        padding: 10px 15px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.9em;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-        text-align: center;
-        color: white;
-      }
-      .btn-accept {
-        background-color: #4caf50;
-      } /* Green */
-      .btn-reject {
-        background-color: #f44336;
-      } /* Red */
-      .btn-reschedule {
-        background-color: #2196f3;
-      } /* Blue */
+  main {
+    max-width: 1200px;
+    margin: 40px auto;
+    /* Added top/bottom margin */
+    padding: 20px;
+  }
 
-      /* --- LIST VIEW STYLES (The New View) --- */
-      .view-list .appointments-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1px; /* Creates thin lines between items */
-        background-color: #ddd;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      .view-list .appointment-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding: 15px;
-        flex-wrap: wrap; /* Allows wrapping on smaller screens */
-      }
-      /* Hide elements not needed in list view */
-      .view-list .date-display,
-      .view-list .description-text {
-        display: none;
-      }
-      .view-list .card-name {
-        font-weight: 600;
-        flex-basis: 150px; /* Give name a base width */
-        flex-grow: 1;
-        padding-right: 15px;
-      }
-      .view-list .details {
-        display: flex;
-        flex-basis: 300px;
-        flex-grow: 2;
-        gap: 20px;
-      }
-      .view-list .action-buttons-container {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-        flex-basis: 280px; /* Fixed space for buttons */
-        flex-grow: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1 class="appointments-title">Manage Appointments</h1>
+  .appointments-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: 600;
+  }
 
-      <!-- View Toggle Buttons -->
-      <div class="view-toggle-container">
-        <button
-          id="view-cards-btn"
-          class="view-toggle-btn active"
-          title="Card View"
-        >
-          <i class="fa-solid fa-grip"></i> Card
-        </button>
-        <button id="view-list-btn" class="view-toggle-btn" title="List View">
-          <i class="fa-solid fa-list"></i> List
-        </button>
-      </div>
+  /* --- View Toggle Buttons --- */
+  .view-toggle-container {
+    text-align: right;
+    margin-bottom: 20px;
+  }
 
-      <!-- THIS IS THE WRAPPER DIV THAT WAS MISSING -->
-      <!-- The JavaScript targets this ID and changes the class to switch views -->
-      <div id="appointmentsContainer" class="view-cards">
-        <div class="appointments-container">
-          {% for appointment in appointments %}
-          <div class="appointment-card">
-            <h3 class="card-name">{{ appointment.name }}</h3>
-            <div class="contact-info-flex">
-              <div class="date-display">
-                <p>appointment date</p>
-                <span class="date-day">{{ appointment.date|date:"d" }}</span>
-                <span class="date-month"
-                  >{{ appointment.date|date:"M"|upper }}</span
-                >
-                <span class="date-year"
-                  >{{ appointment.date|date:"Y"|upper }}</span
-                >
-              </div>
-              <div class="details">
-                <p class="email-text">{{ appointment.email }}</p>
-                <p class="phone-text">{{ appointment.phone }}</p>
-                <p class="created-at-text">
-                  Created at: {{ appointment.created_at|date:"d M Y H:i" }}
-                </p>
-              </div>
-            </div>
-            <p class="description-text">
-              {{ appointment.message|default:"No message
-              provided."|truncatewords:25 }}
-            </p>
+  .view-toggle-btn {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 5px;
+    transition: background-color 0.3s, color 0.3s;
+  }
 
-            <div class="action-buttons-container">
-              <button
-                type="button"
-                class="btn-action btn-accept"
-                data-bs-toggle="modal"
-                data-bs-target="#actionModal"
-                data-name="{{ appointment.name }}"
-                data-date="{{ appointment.date }}"
-                data-action="Accepted"
-                data-id="{{ appointment.id }}"
-              >
-                Accept
-              </button>
+  .view-toggle-btn:hover {
+    background-color: #f0f0f0;
+  }
 
-              <button
-                type="button"
-                class="btn-action btn-reject"
-                data-bs-toggle="modal"
-                data-bs-target="#actionModal"
-                data-name="{{ appointment.name }}"
-                data-date="{{ appointment.date }}"
-                data-action="Rejected"
-                data-id="{{ appointment.id }}"
-              >
-                Reject
-              </button>
+  .view-toggle-btn.active {
+    background-color: #c2185b;
+    color: #fff;
+    border-color: #c2185b;
+  }
 
-              <button
-                type="button"
-                class="btn-action btn-reschedule"
-                data-bs-toggle="modal"
-                data-bs-target="#actionModal"
-                data-name="{{ appointment.name }}"
-                data-date="{{ appointment.date }}"
-                data-action="Rescheduled"
-                data-id="{{ appointment.id }}"
-              >
-                Reschedule
-              </button>
-            </div>
+  .view-toggle-btn .fa-solid {
+    margin-right: 5px;
+  }
+
+  /* --- CARD VIEW STYLES --- */
+  .view-cards .appointments-container-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+  }
+  
+
+  .appointment-item {
+    /* This is the main item style for both views */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .view-cards .appointment-item {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e0e0e0;
+  }
+
+  .view-cards .card-name {
+    font-size: 1.25em;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+  }
+
+  .view-cards .contact-info-flex {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+  }
+
+  .view-cards .date-display {
+    background-color: #EBF4FF;
+    color: #4A90E2;
+    border-radius: 4px;
+    padding: 8px 10px;
+    text-align: center;
+    margin-right: 15px;
+    min-width: 50px;
+  }
+
+  .view-cards .date-day {
+    display: block;
+    font-size: 1.4em;
+    font-weight: bold;
+  }
+
+  .view-cards .date-month {
+    display: block;
+    font-size: 0.8em;
+    text-transform: uppercase;
+  }
+
+  .view-cards .date-year {
+    display: block;
+    font-size: 0.8em;
+  }
+
+  .view-cards .details {
+    font-size: 0.9em;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .view-cards .details p {
+    margin: 2px 0;
+  }
+
+  .view-cards .description-text {
+    font-size: 0.9em;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    background-color: rgba(236, 6, 6, 0.09);
+    border-left: 4px solid #ad1457;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 6px;
+  }
+
+  .view-cards .action-buttons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+  }
+
+  /* --- LIST VIEW STYLES --- */
+  .view-list .appointments-container-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background-color: #ddd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .view-list .appointment-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    flex-wrap: wrap;
+  }
+
+  .view-list .date-display,
+  .view-list .description-text {
+    display: none;
+  }
+
+  .view-list .card-name {
+    font-weight: 600;
+    flex-basis: 150px;
+    flex-grow: 1;
+    padding-right: 15px;
+  }
+
+  .view-list .details {
+    display: flex;
+    flex-basis: 300px;
+    flex-grow: 2;
+    gap: 20px;
+  }
+
+  .view-list .action-buttons-container {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-basis: 280px;
+    flex-grow: 1;
+  }
+
+  /* --- SHARED BUTTON STYLES --- */
+  .btn-action {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    color: white;
+  }
+
+  .btn-accept {
+    background-color: #4CAF50;
+  }
+
+  .btn-reject {
+    background-color: #F44336;
+  }
+
+  .btn-reschedule {
+    background-color: #2196F3;
+  }
+</style>
+
+<main>
+  <h1 class="appointments-title">Manage Appointments</h1>
+
+  <div class="view-toggle-container">
+    <button id="view-cards-btn" class="view-toggle-btn active" title="Card View"><i class="fa-solid fa-grip"></i>
+      Card</button>
+    <button id="view-list-btn" class="view-toggle-btn" title="List View"><i class="fa-solid fa-list"></i> List</button>
+  </div>
+
+  <!-- This is the main wrapper the JavaScript will target -->
+  <div id="appointmentsContainer" class="view-cards">
+    <div class="appointments-container-grid">
+
+      {% for appointment in appointments %}
+      <!-- The appointment-item class is now the direct child for styling -->
+      <div class="appointment-item">
+        <h3 class="card-name">{{ appointment.name }}</h3>
+        <div class="contact-info-flex">
+          <div class="date-display">
+            <span class="date-day">{{ appointment.date|date:"d" }}</span>
+            <span class="date-month">{{ appointment.date|date:"M"|upper }}</span>
+            <span class="date-year">{{ appointment.date|date:"Y" }}</span>
           </div>
-          {% empty %}
-          <div style="text-align: center; grid-column: 1 / -1">
-            <p>No appointments found.</p>
-          </div>
-          {% endfor %}
-          <div
-            class="modal fade"
-            id="actionModal"
-            tabindex="-1"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <form method="post" action="{% url 'manage_appointment' %}">
-                  {% csrf_token %}
-                  <div class="modal-header">
-                    <h5 class="modal-title">Send Message</h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <input type="hidden" name="action_type" id="modalAction" />
-                    <input
-                      type="hidden"
-                      name="appointment_id"
-                      id="modalAppointmentId"
-                    />
-                    <label for="modalMessage" class="form-label">Message</label>
-                    <textarea
-                      name="message"
-                      id="modalMessage"
-                      class="form-control"
-                      rows="4"
-                    ></textarea>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="submit"
-                      class="btn btn-primary"
-                      id="modalSubmitButton"
-                    >
-                      Send
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+          <div class="details">
+            <p class="email-text">{{ appointment.email }}</p>
+            <p class="phone-text">{{ appointment.phone }}</p>
+            <p class="created-at-text">Created at: {{ appointment.created_at|date:"d M Y H:i" }}</p>
           </div>
         </div>
-
-        {% if is_paginated %}
-
-        <nav
-          aria-label="Page navigation"
-          class="d-flex justify-content-center mt-4"
-        >
-          <ul class="pagination">
-            {% if page_obj.has_previous %}
-
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
-              >
-                &laquo; Previous
-              </a>
-            </li>
-
-            {% else %}
-
-            <li class="page-item disabled">
-              <span class="page-link">&laquo; Previous</span>
-            </li>
-
-            {% endif %}
-
-            <li class="page-item disabled">
-              <span class="page-link">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-              </span>
-            </li>
-
-            {% if page_obj.has_next %}
-
-            <li class="page-item">
-              <a
-                class="page-link"
-                href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
-              >
-                Next &raquo;
-              </a>
-            </li>
-
-            {% else %}
-
-            <li class="page-item disabled">
-              <span class="page-link">Next &raquo;</span>
-            </li>
-
-            {% endif %}
-          </ul>
-        </nav>
-
-        {% endif %}
+        <p class="description-text">{{ appointment.message|default:"No message provided."|truncatewords:25 }}</p>
+        <div class="action-buttons-container">
+          <button type="button" class="btn-action btn-accept" data-bs-toggle="modal" data-bs-target="#actionModal"
+            data-name="{{ appointment.name }}" data-date="{{ appointment.date|date:'d M Y' }}" data-action="Accepted"
+            data-id="{{ appointment.id }}">Accept</button>
+          <button type="button" class="btn-action btn-reject" data-bs-toggle="modal" data-bs-target="#actionModal"
+            data-name="{{ appointment.name }}" data-date="{{ appointment.date|date:'d M Y' }}" data-action="Rejected"
+            data-id="{{ appointment.id }}">Reject</button>
+          <button type="button" class="btn-action btn-reschedule" data-bs-toggle="modal" data-bs-target="#actionModal"
+            data-name="{{ appointment.name }}" data-date="{{ appointment.date|date:'d M Y' }}" data-action="Rescheduled"
+            data-id="{{ appointment.id }}">Reschedule</button>
+        </div>
       </div>
-    </main>
+      {% empty %}
+      <div style="text-align: center; grid-column: 1 / -1;">
+        <p>No appointments found.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // --- Logic for the Modal ---
-        const actionModal = document.getElementById("actionModal");
-        if (actionModal) {
-          const modalSubmitButton = actionModal.querySelector(
-            'button[type="submit"]'
-          );
-          actionModal.addEventListener("show.bs.modal", function (event) {
-            const button = event.relatedTarget;
-            if (button) {
-              const name = button.getAttribute("data-name");
-              const date = button.getAttribute("data-date");
-              const action = button.getAttribute("data-action");
-              const appointmentId = button.getAttribute("data-id");
+  <!-- Modal remains unchanged -->
+  <div class="modal fade" id="actionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" action="{% url 'manage_appointment' %}">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title">Send Message</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" name="action_type" id="modalAction">
+            <input type="hidden" name="appointment_id" id="modalAppointmentId">
+            <label for="modalMessage" class="form-label">Message</label>
+            <textarea name="message" id="modalMessage" class="form-control" rows="4"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="modalSubmitButton">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-              const modalActionInput = document.getElementById("modalAction");
-              const modalAppointmentIdInput =
-                document.getElementById("modalAppointmentId");
-              const modalMessageTextarea =
-                document.getElementById("modalMessage");
+  {% if is_paginated %}
+  <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link"
+          href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;
+          Previous</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">&laquo; Previous</span></li>
+      {% endif %}
 
-              if (modalActionInput) modalActionInput.value = action;
-              if (modalAppointmentIdInput)
-                modalAppointmentIdInput.value = appointmentId;
+      <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{
+          page_obj.paginator.num_pages }}</span></li>
 
-              let messageText = `Hi ${name}, your appointment on ${date} has been ${
-                action ? action.toLowerCase() : "processed"
-              }.`;
-              let submitButtonText = "Send";
-              let submitButtonClass = "btn btn-primary";
+      {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link"
+          href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Next
+          &raquo;</a></li>
+      {% else %}
+      <li class="page-item disabled"><span class="page-link">Next &raquo;</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
+</main>
+{% endblock content%}
 
-              if (action === "Accepted") {
-                submitButtonText = "Confirm Acceptance";
-                submitButtonClass = "btn btn-success";
-              } else if (action === "Rejected") {
-                submitButtonText = "Confirm Rejection";
-                submitButtonClass = "btn btn-danger";
-              } else if (action === "Rescheduled") {
-                submitButtonText = "Confirm Reschedule";
-                submitButtonClass = "btn btn-warning";
-              }
+{% block scripts %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // --- Logic for the Modal ---
+    const actionModal = document.getElementById('actionModal');
+    if (actionModal) {
+      const modalSubmitButton = actionModal.querySelector('button[type="submit"]');
+      actionModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        if (button) {
+          const name = button.getAttribute('data-name');
+          const date = button.getAttribute('data-date');
+          const action = button.getAttribute('data-action');
+          const appointmentId = button.getAttribute('data-id');
 
-              if (modalMessageTextarea)
-                modalMessageTextarea.value = messageText;
-              if (modalSubmitButton) {
-                modalSubmitButton.textContent = submitButtonText;
-                modalSubmitButton.className = submitButtonClass;
-              }
-            }
-          });
-        }
+          const modalActionInput = document.getElementById('modalAction');
+          const modalAppointmentIdInput = document.getElementById('modalAppointmentId');
+          const modalMessageTextarea = document.getElementById('modalMessage');
 
-        // --- Logic for the View Toggle ---
-        const cardViewBtn = document.getElementById("view-cards-btn");
-        const listViewBtn = document.getElementById("view-list-btn");
-        const container = document.getElementById("appointmentsContainer");
+          if (modalActionInput) modalActionInput.value = action;
+          if (modalAppointmentIdInput) modalAppointmentIdInput.value = appointmentId;
 
-        if (cardViewBtn && listViewBtn && container) {
-          cardViewBtn.addEventListener("click", function () {
-            container.className = "view-cards";
-            cardViewBtn.classList.add("active");
-            listViewBtn.classList.remove("active");
-          });
+          let messageText = `Hi ${name}, your appointment on ${date} has been ${action ? action.toLowerCase() : 'processed'}.`;
+          let submitButtonText = "Send";
+          let submitButtonClass = "btn btn-primary";
 
-          listViewBtn.addEventListener("click", function () {
-            container.className = "view-list";
-            listViewBtn.classList.add("active");
-            cardViewBtn.classList.remove("active");
-          });
+          if (action === "Accepted") {
+            submitButtonText = "Confirm Acceptance";
+            submitButtonClass = "btn btn-success";
+          } else if (action === "Rejected") {
+            submitButtonText = "Confirm Rejection";
+            submitButtonClass = "btn btn-danger";
+          } else if (action === "Rescheduled") {
+            submitButtonText = "Confirm Reschedule";
+            submitButtonClass = "btn btn-warning";
+          }
+
+          if (modalMessageTextarea) modalMessageTextarea.value = messageText;
+          if (modalSubmitButton) {
+            modalSubmitButton.textContent = submitButtonText;
+            modalSubmitButton.className = submitButtonClass;
+          }
         }
       });
-    </script>
-  </body>
-</html>
+    }
+
+    // --- Logic for the View Toggle ---
+    const cardViewBtn = document.getElementById('view-cards-btn');
+    const listViewBtn = document.getElementById('view-list-btn');
+    const container = document.getElementById('appointmentsContainer');
+
+    if (cardViewBtn && listViewBtn && container) {
+      cardViewBtn.addEventListener('click', function () {
+        container.className = 'view-cards';
+        cardViewBtn.classList.add('active');
+        listViewBtn.classList.remove('active');
+      });
+
+      listViewBtn.addEventListener('click', function () {
+        container.className = 'view-list';
+        listViewBtn.classList.add('active');
+        cardViewBtn.classList.remove('active');
+      });
+    }
+  });
+</script>
+{% endblock scripts %}
