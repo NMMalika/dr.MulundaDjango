@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib import messages
-from .models import Appointment, Blogs
+from .models import Appointment, Blogs,ContactMessage
 from .forms import CommentForm
 from django.views.generic import ListView
 from django.core.paginator import Paginator
@@ -18,6 +18,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from openpyxl import Workbook
+from django.shortcuts import get_object_or_404, render, redirect
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
@@ -26,24 +27,33 @@ class HomeTemplateView(TemplateView):
 class AppointmentTemplateView(TemplateView):
     template_name = 'index.html'
     
-    def post(self,request):
-        name=request.POST.get('name')
-        phone=request.POST.get('phone')
-        email=request.POST.get('email')
-        date=request.POST.get('date')
-        message=request.POST.get('note')
-        
-        appointment= Appointment.objects.create(
+    
+    
+    def post(self, request):
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        date = request.POST.get('date')
+        message = request.POST.get('note')
+
+        # Simple validation
+        if not all([name, phone, email, date]):
+            messages.error(request, "Please fill in all required fields.")
+            return redirect('booking-section')
+
+        Appointment.objects.create(
             name=name,
             phone=phone,
             email=email,
             date=date,
             message=message
         )
-        appointment.save()
 
-        messages.add_message(request, messages.SUCCESS, f"Thanks {name} for your appointment request. We will get back to you soon.")
-        return redirect ('booking-section')
+        messages.success(
+            request,
+            f"Thanks {name} for your appointment request. We will get back to you soon."
+        )
+        return redirect('booking-section')
 
 class ContactTemplateView(TemplateView):
     template_name = 'index.html'
@@ -87,9 +97,19 @@ class ContactTemplateView(TemplateView):
         )
         email_message.attach_alternative(html_content, "text/html")
         email_message.send()
+        
+        contact_message= ContactMessage.objects.create(
+            name=name,
+            email=email,
+            phone_number=phone_number,
+            location=location,
+            subject=subject,
+            message=message,
+        )
 
         return HttpResponse("Email sent successfully!")
     
+@method_decorator(staff_member_required, name='dispatch')
 class ManageAppointmentView(View):
     template_name = 'manage_appointment.html'
 
@@ -104,54 +124,51 @@ class ManageAppointmentView(View):
             'is_paginated': page_obj.has_other_pages(),
             'page_obj': page_obj,
             'title': 'Manage Appointments',
-            'description': 'View and manage all appointments.',
         })
 
     def post(self, request, *args, **kwargs):
-        action = request.POST.get('action_type')
-        appointment_id = request.POST.get('appointment_id')
-        message = request.POST.get('message')
-        
-        # handle your message sending or appointment updating here
-        return redirect(request,'admin/doctor/manage_appointments.html')
-    
+        action = request.POST.get("action_type")
+        appointment_id = request.POST.get("appointment_id")
+        custom_message = request.POST.get("message")
 
-@method_decorator(staff_member_required, name='dispatch')
-class ManageAppointmentView(View):
-    template_name = 'manage_appointment.html'
+        appointment = get_object_or_404(Appointment, id=appointment_id)
 
-    def get(self, request):
-        appointments = Appointment.objects.all().order_by('-created_at')
-        # Your pagination logic is correct
-        paginator = Paginator(appointments, 3) 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+        # Update status
+        if action == "Accepted":
+            appointment.status = "Accepted"
+            subject = "Your Appointment is Accepted"
+        elif action == "Rejected":
+            appointment.status = "Rejected"
+            subject = "Your Appointment is Rejected"
+        elif action == "Rescheduled":
+            appointment.status = "Rescheduled"
+            subject = "Your Appointment is Rescheduled"
+        else:
+            subject = "Appointment Update"
 
-        return render(request, self.template_name, {
-            'appointments': page_obj,
-            'is_paginated': page_obj.has_other_pages(),
-            'page_obj': page_obj,
-            'title': 'Manage Appointments',
-        })
+        appointment.save()
 
-    def post(self, request, *args, **kwargs):
-        action = request.POST.get('action_type')
-        appointment_id = request.POST.get('appointment_id')
-        
+        # Build email content
+        email_message = (
+            custom_message
+            if custom_message
+            else f"Dear {appointment.name}, your appointment on {appointment.date.strftime('%d %b %Y %H:%M')} has been {action.lower()}."
+        )
+
+        # Send email
         try:
-            appointment = Appointment.objects.get(id=appointment_id)
-            if action == 'accept':
-                appointment.status = 'Accepted' # Assumes you have a 'status' field in your model
-                messages.success(request, f"Appointment for {appointment.name} was accepted.")
-            elif action == 'reject':
-                appointment.status = 'Rejected'
-                messages.error(request, f"Appointment for {appointment.name} was rejected.")
-            appointment.save()
-        except Appointment.DoesNotExist:
-            messages.error(request, "Appointment not found.")
-            
-        # Redirect back to the same management page
-        return redirect('admin:doctor_appointment_changelist')
+            send_mail(
+                subject=subject,
+                message=email_message,
+                from_email=None,  # Uses DEFAULT_FROM_EMAIL in settings.py
+                recipient_list=[appointment.email],
+                fail_silently=False,
+            )
+            messages.success(request, f"Email sent to {appointment.name}")
+        except Exception as e:
+            messages.error(request, f"Failed to send email: {e}")
+
+        return redirect("admin:doctor_appointment_changelist")
     
 def blog(request):
     recent_blogs = Blogs.objects.all().order_by('-created_at')  # Get all blogs ordered by creation date

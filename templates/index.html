@@ -85,6 +85,7 @@
                             </div>
                             <form  action="{% url 'booking-section' %}" method="POST">
                                 {% csrf_token %}
+                                <input type="hidden" name="form_type" value="appointment">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="input-group form-group">
@@ -476,8 +477,9 @@
                         </div>
 
                         <div class="col-lg-8">
-                            <form action="{% url 'home' %}" method="post" role="form" class="php-email-form">
+                            <form action="{% url 'contact' %}" method="post" role="form" class="php-email-form">
                                 {% csrf_token %}
+                                <input type="hidden" name="form_type" value="contact">
                                 <div class="row">
                                     <div class="col-md-6 form-group">
                                         <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required />

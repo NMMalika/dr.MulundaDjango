@@ -14,3 +14,8 @@ class CommentForm(forms.ModelForm):
             'phone_number': forms.TextInput(attrs={'placeholder': 'Phone Number'}),
             'comment': forms.Textarea(attrs={'placeholder': 'Write your comment here...', 'rows': 4}),
         }
+    
+
+class ReplyForm(forms.Form):
+    subject = forms.CharField(max_length=200)
+    body = forms.CharField(widget=forms.Textarea)

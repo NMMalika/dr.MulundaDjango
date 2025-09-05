@@ -5,6 +5,12 @@ from django.utils import timezone
 
 # Create your models here.
 class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected'),
+        ('Rescheduled', 'Rescheduled'),
+    ]
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=50)
@@ -18,6 +24,8 @@ class Appointment(models.Model):
     rescheduled_time = models.TimeField(blank=True, null=True)
     rescheduled_reason = models.TextField(blank=True, null=True)
     appointment_time = models.TimeField(blank=True, null=True)
+    
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
 
     def __str__(self):
         return f"Appointment by {self.name} on {self.date} at {self.appointment_time}"
@@ -64,3 +72,15 @@ class Comment(models.Model):
         ordering = ['-created_at']
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
+        
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    subject = models.CharField(max_length=200)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.subject}"
