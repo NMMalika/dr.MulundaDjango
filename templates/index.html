@@ -101,7 +101,7 @@
                                         </div>
                                         <div class="input-group form-group">
                                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                            <input type="text" class="form-control" name="date" placeholder="15/05/2025" />
+                                            <input type="date" name="date" class="form-control" placeholder="Your appointment Date"   required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -395,23 +395,24 @@
                     </div>
 
                     <div class="row gy-4">
+                     {% for blog in recent_blogs %}
                         <div class="col-xl-4 col-md-6">
                             <article>
                                 <div class="post-img">
-                                    <img src="{% static "assets/img/blog/pregnacy.avif" %}" alt="" class="img-fluid" />
+                                    <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="img-fluid" />
                                 </div>
 
-                                <p class="post-category">Pregnancy Care (Antenatal & Postnatal)</p>
+                                <p class="post-category">{{ blog.category }}</p>
 
                                 <h2 class="title">
-                                    <a href="blog-details.html">Understanding Pregnancy Care: What to Expect</a>
+                                    <a href="{% url 'blogdetail' blog_id=blog.id %}">{{ blog.title }}</a>
                                 </h2>
 
                                 <div class="d-flex align-items-center">
                                     <div class="post-meta">
-                                        <p class="post-author">Dr Jackie Mulunda</p>
+                                        <p class="post-author">{{ blog.author }}</p>
                                         <p class="post-date">
-                                            <time datetime="2022-01-01">Jan 1, 2025</time>
+                                            <time datetime="{{ blog.created_at|date:"c" }}">{{ blog.created_at|date:"M d, Y" }}</time>
                                         </p>
                                     </div>
                                 </div>
@@ -419,53 +420,7 @@
                         </div>
                         <!-- End post list item -->
 
-                        <div class="col-xl-4 col-md-6">
-                            <article>
-                                <div class="post-img">
-                                    <img src="{% static "assets/img/blog/menstraul.avif" %}" alt="" class="img-fluid" />
-                                </div>
-
-                                <p class="post-category">Menstrual Disorders</p>
-
-                                <h2 class="title">
-                                    <a href="blog-details.html">Managing Menstrual Health and Disorders</a>
-                                </h2>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="post-meta">
-                                        <p class="post-author">Dr Jackie Mulunda</p>
-                                        <p class="post-date">
-                                            <time datetime="2022-01-01">Jun 5, 2025</time>
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        <!-- End post list item -->
-
-                        <div class="col-xl-4 col-md-6">
-                            <article>
-                                <div class="post-img">
-                                    <img src="{% static "assets/img/blog/checkup.webp" %}" alt="" class="img-fluid" />
-                                </div>
-
-                                <p class="post-category">General Women’s Health Checkups</p>
-
-                                <h2 class="title">
-                                    <a href="blog-details.html">Importance of Regular Women's Health Screenings</a>
-                                </h2>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="post-meta">
-                                        <p class="post-author">Dr Jackline Mulunda</p>
-                                        <p class="post-date">
-                                            <time datetime="2022-01-01">Jun 22, 2025</time>
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        <!-- End post list item -->
+                    {% endfor %}
                     </div>
                     <!-- End recent posts list -->
                 </div>

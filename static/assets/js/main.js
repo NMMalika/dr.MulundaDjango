@@ -269,3 +269,22 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 });
+
+document.addEventListener("scroll", function () {
+  const faqSection = document.querySelector("#faq");
+
+  if (!faqSection) return;
+
+  const rect = faqSection.getBoundingClientRect();
+
+  // Check if the FAQ section is completely out of view
+  if (rect.bottom < 0 || rect.top > window.innerHeight) {
+    let openAccordions = document.querySelectorAll(".accordion-collapse.show");
+    openAccordions.forEach((acc) => {
+      let bsCollapse = bootstrap.Collapse.getInstance(acc);
+      if (bsCollapse) {
+        bsCollapse.hide();
+      }
+    });
+  }
+});

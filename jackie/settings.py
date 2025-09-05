@@ -29,6 +29,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "doctor",
+    "ckeditor",
+    "ckeditor_uploader",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -125,3 +128,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "nimcityenterprises@gmail.com"
 EMAIL_HOST_PASSWORD =  os.environ.get("EMAIL_HOST_PASSWORD")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+CKEDITOR_UPLOAD_PATH = "uploads/"

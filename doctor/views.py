@@ -5,10 +5,10 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib import messages
-from .models import Appointment
+from .models import Appointment, Blogs
+from .forms import CommentForm
 from django.views.generic import ListView
 from django.core.paginator import Paginator
-from django.views import View
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
@@ -146,6 +146,46 @@ class ManageAppointmentView(View):
             
         # Redirect back to the same management page
         return redirect('admin:doctor_appointment_changelist')
+    
+def blog(request):
+    recent_blogs = Blogs.objects.all().order_by('-created_at')  # Get all blogs ordered by creation date
+    paginator = Paginator(recent_blogs, 5)  # Show 5 blogs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, "blog.html", {'page_obj': page_obj, 'recent_blogs': recent_blogs})
+
+
+def blogdetail(request, blog_id):
+    blog = Blogs.objects.get(id=blog_id)
+    recent_blogs = Blogs.objects.all().exclude(id=blog_id).order_by('-created_at')[:4]  # Get the 4 most recent blogs
+      # Previous post: blog with ID less than current (older)
+    previous_blog = Blogs.objects.filter(id__lt=blog_id).order_by('-id').first()
+
+    # Next post: blog with ID greater than current (newer)
+    next_blog = Blogs.objects.filter(id__gt=blog_id).order_by('id').first()
+    
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.blog = blog  # Link comment to this blog
+            comment.save()
+            return redirect('blogdetail', blog_id=blog.id)
+    else:
+        form = CommentForm()
+
+    
+    comments = blog.comments.filter(approved=True).order_by('-created_at')
+    
+    return render(request, "blogdetail.html", {
+        'blog': blog,
+        'recent_blogs': recent_blogs,
+        'previous_blog': previous_blog,
+        'next_blog': next_blog,
+        'form': form,
+        'comments': comments
+    })
+
       
     
    
