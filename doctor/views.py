@@ -12,6 +12,12 @@ from django.core.paginator import Paginator
 from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
+import io
+from django.http import FileResponse, HttpResponse
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from openpyxl import Workbook
 # Create your views here.
 
 class HomeTemplateView(TemplateView):
@@ -187,5 +193,61 @@ def blogdetail(request, blog_id):
     })
 
       
-    
+
+
+
+
+# --- PDF EXPORT ---
+def export_appointments_pdf(request):
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer)
+    styles = getSampleStyleSheet()
+    elements = []
+
+    # Title
+    elements.append(Paragraph("Appointments Report", styles['Heading1']))
+
+    # Table data
+    data = [["Name", "Email", "Phone", "Date", "Message"]]
+    for appt in Appointment.objects.all():
+        data.append([appt.name, appt.email, appt.phone,
+                     appt.date.strftime("%d-%m-%Y"), appt.message])
+
+    # Create table
+    table = Table(data, repeatRows=1)
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("GRID", (0, 0), (-1, -1), 1, colors.black),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+    ]))
+    elements.append(table)
+
+    doc.build(elements)
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="appointments.pdf")
+
+
+# --- EXCEL EXPORT ---
+def export_appointments_excel(request):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Appointments"
+
+    # Headers
+    ws.append(["Name", "Email", "Phone", "Date", "Message"])
+
+    # Data rows
+    for appt in Appointment.objects.all():
+        ws.append([appt.name, appt.email, appt.phone,
+                   appt.date.strftime("%d-%m-%Y"), appt.message])
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = 'attachment; filename="appointments.xlsx"'
+    wb.save(response)
+    return response
+  
    

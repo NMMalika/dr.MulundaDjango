@@ -307,6 +307,12 @@
         <button id="view-list-btn" class="view-toggle-btn" title="List View">
           <i class="fa-solid fa-list"></i> List
         </button>
+        <a href="{% url 'export_appointments_pdf' %}" class="btn btn-danger">
+          📄 Export PDF
+        </a>
+        <a href="{% url 'export_appointments_excel' %}" class="btn btn-success">
+          📊 Export Excel
+        </a>
         <a href="{% url 'admin:doctor_appointment_add' %}" class="btn btn-primary">
           ➕ Add Appointment (Admin)
         </a>
