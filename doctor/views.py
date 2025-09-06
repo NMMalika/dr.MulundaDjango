@@ -114,16 +114,25 @@ class ManageAppointmentView(View):
     template_name = 'manage_appointment.html'
 
     def get(self, request):
-        appointments = Appointment.objects.all().order_by('-created_at')
-        paginator = Paginator(appointments, 3)
+        # Separate appointments by status
+        pending_appointments = Appointment.objects.filter(status="Pending").order_by('-created_at')
+        accepted_appointments = Appointment.objects.filter(status="Accepted").order_by('-created_at')
+        rejected_appointments = Appointment.objects.filter(status="Rejected").order_by('-created_at')
+        rescheduled_appointments = Appointment.objects.filter(status="Rescheduled").order_by('-created_at')
+
+        # Paginate only pending ones (the active queue)
+        paginator = Paginator(pending_appointments, 3)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
         return render(request, self.template_name, {
-            'appointments': page_obj,
-            'is_paginated': page_obj.has_other_pages(),
-            'page_obj': page_obj,
-            'title': 'Manage Appointments',
+            "pending_appointments": page_obj,   # only pending paginated
+            "accepted_appointments": accepted_appointments,
+            "rejected_appointments": rejected_appointments,
+            "rescheduled_appointments": rescheduled_appointments,
+            "is_paginated": page_obj.has_other_pages(),
+            "page_obj": page_obj,
+            "title": "Manage Appointments",
         })
 
     def post(self, request, *args, **kwargs):
@@ -160,7 +169,7 @@ class ManageAppointmentView(View):
             send_mail(
                 subject=subject,
                 message=email_message,
-                from_email=None,  # Uses DEFAULT_FROM_EMAIL in settings.py
+                from_email=None,  # Uses DEFAULT_FROM_EMAIL
                 recipient_list=[appointment.email],
                 fail_silently=False,
             )
@@ -168,7 +177,8 @@ class ManageAppointmentView(View):
         except Exception as e:
             messages.error(request, f"Failed to send email: {e}")
 
-        return redirect("admin:doctor_appointment_changelist")
+        return redirect("manage_appointment")  # Redirect back to same view
+
     
 def blog(request):
     recent_blogs = Blogs.objects.all().order_by('-created_at')  # Get all blogs ordered by creation date

@@ -61,6 +61,12 @@
   .view-toggle-btn .fa-solid {
     margin-right: 5px;
   }
+  .view-toggle-btn.active {
+  background-color: #e91e63 !important; /* pink highlight */
+  color: #fff !important;
+  border-color: #e91e63 !important;
+}
+
 
   /* --- Card View Styles --- */
   .view-cards .appointments-container {
@@ -71,7 +77,7 @@
   }
 
   .appointment-item {
-    background-color: #fff;
+    background-color: #ffa8B6;
     border: 1px solid #ddd;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -193,7 +199,7 @@
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
-    background-color: #ffffff;
+    background-color: #ffa8B6;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     padding: 20px;
@@ -246,7 +252,13 @@
 
 <main>
   <h1 class="appointments-title">Manage Appointments</h1>
-  <a href="{% url 'admin:index' %}" class="btn btn-dark">🏠 Admin Home</a>
+  <header>
+    <a href="{% url 'admin:index' %}" class="btn btn-dark">🏠 Admin Home</a>
+    <a href="{% url 'export_appointments_pdf' %}" class="btn btn-danger">📄 Export PDF</a>
+    <a href="{% url 'export_appointments_excel' %}" class="btn btn-success">📊 Export Excel</a>
+    <a href="{% url 'admin:doctor_appointment_add' %}" class="btn btn-primary">➕ Add Appointment</a>
+  </header>
+ 
 
   <div class="view-toggle-container">
     <button id="view-cards-btn" class="view-toggle-btn active" title="Card View">
@@ -255,15 +267,28 @@
     <button id="view-list-btn" class="view-toggle-btn" title="List View">
       <i class="fa-solid fa-list"></i> List
     </button>
-    <a href="{% url 'export_appointments_pdf' %}" class="btn btn-danger">📄 Export PDF</a>
-    <a href="{% url 'export_appointments_excel' %}" class="btn btn-success">📊 Export Excel</a>
-    <a href="{% url 'admin:doctor_appointment_add' %}" class="btn btn-primary">➕ Add Appointment</a>
+    <button id="btn-showall" class="view-toggle-btn" title="Show All">
+      <i class="fa-solid fa-layer-group"></i> Show All
+    </button>
+    <button id="btn-pending" class="view-toggle-btn" title="Pending Appointments">
+      <i class="fa-solid fa-hourglass-half"></i> Pending
+    </button>
+    <button id="btn-accepted" class="view-toggle-btn" title="Accepted Appointments">
+      <i class="fa-solid fa-check"></i> Accepted
+    </button>
+    <button id="btn-rejected" class="view-toggle-btn" title="Rejected Appointments">
+      <i class="fa-solid fa-times"></i> Rejected
+    </button>
+    <button id="btn-rescheduled" class="view-toggle-btn" title="Rescheduled Appointments">
+      <i class="fa-solid fa-calendar-alt"></i> Rescheduled
+    </button>
+    
   </div>
 
   <div id="appointmentsContainer" class="view-cards">
     <div class="appointments-container">
-      {% for appointment in appointments %}
-      <div class="appointment-item">
+      {% for appointment in pending_appointments %}
+      <div class="appointment-item" id="pending-container">
         <h3 class="card-name">{{ appointment.name }}</h3>
         <div class="contact-info-flex">
           <div class="date-display">
@@ -296,6 +321,85 @@
       </div>
       {% endfor %}
     </div>
+    <h2 class="appointments-title">Processed Appointments</h2>
+    
+    
+    <div class="appointments-container"  id="accepted-container">
+      <h4>✅ Accepted</h4>
+      {% for appointment in accepted_appointments %}
+      <div class="appointment-item" >
+        <h3 class="card-name">{{ appointment.name }}</h3>
+        <div class="contact-info-flex">
+          <div class="date-display">
+            <span class="date-day">{{ appointment.date|date:"d" }}</span>
+            <span class="date-month">{{ appointment.date|date:"M"|upper }}</span>
+            <span class="date-year">{{ appointment.date|date:"Y"|upper }}</span>
+          </div>
+          <div class="details">
+            <p>{{ appointment.email }}</p>
+            <p>{{ appointment.phone }}</p>
+            <p>Created: {{ appointment.created_at|date:"d M Y H:i" }}</p>
+          </div>
+        </div>
+        <p class="description-text">{{ appointment.message }}</p>
+        
+      </div>
+      {% empty %}
+      <p>No accepted appointments yet.</p>
+      {% endfor %}
+    </div>
+    
+    <div class="appointments-container" id="rejected-container">
+              <h4>❌ Rejected</h4>
+      {% for appointment in rejected_appointments %}
+      <div class="appointment-item">
+        <h3 class="card-name">{{ appointment.name }}</h3>
+        <div class="contact-info-flex">
+          <div class="date-display">
+            <span class="date-day">{{ appointment.date|date:"d" }}</span>
+            <span class="date-month">{{ appointment.date|date:"M"|upper }}</span>
+            <span class="date-year">{{ appointment.date|date:"Y"|upper }}</span>
+          </div>
+          <div class="details">
+            <p>{{ appointment.email }}</p>
+            <p>{{ appointment.phone }}</p>
+            <p>Created: {{ appointment.created_at|date:"d M Y H:i" }}</p>
+          </div>
+        </div>
+        <p class="description-text">{{ appointment.message }}</p>
+       
+      </div>
+      {% empty %}
+      <p>No rejected appointments yet.</p>
+      {% endfor %}
+    </div>
+    
+    
+    <div class="appointments-container" id="rescheduled-container">
+      <h4>📅 Rescheduled</h4>
+      {% for appointment in rescheduled_appointments %}
+    <div class="appointment-item">
+      <h3 class="card-name">{{ appointment.name }}</h3>
+      <div class="contact-info-flex">
+        <div class="date-display">
+          <span class="date-day">{{ appointment.date|date:"d" }}</span>
+          <span class="date-month">{{ appointment.date|date:"M"|upper }}</span>
+          <span class="date-year">{{ appointment.date|date:"Y"|upper }}</span>
+        </div>
+        <div class="details">
+          <p>{{ appointment.email }}</p>
+          <p>{{ appointment.phone }}</p>
+          <p>Created: {{ appointment.created_at|date:"d M Y H:i" }}</p>
+        </div>
+      </div>
+      <p class="description-text">{{ appointment.message }}</p>
+     
+    </div>
+      {% empty %}
+      <p>No rescheduled appointments yet.</p>
+      {% endfor %}
+    </div>
+
 
     {% if is_paginated %}
     <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
@@ -347,59 +451,111 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const actionModal = document.getElementById("actionModal");
-    if (actionModal) {
-      const modalSubmitButton = actionModal.querySelector('button[type="submit"]');
-      actionModal.addEventListener("show.bs.modal", function (event) {
-        const button = event.relatedTarget;
-        if (button) {
-          const name = button.getAttribute("data-name");
-          const date = button.getAttribute("data-date");
-          const action = button.getAttribute("data-action");
-          const appointmentId = button.getAttribute("data-id");
+    // --- Main container that switches view ---
+    const appointmentsContainer = document.getElementById("appointmentsContainer");
 
-          document.getElementById("modalAction").value = action;
-          document.getElementById("modalAppointmentId").value = appointmentId;
+    // --- View toggle buttons ---
+    const btnCards = document.getElementById("view-cards-btn");
+    const btnList = document.getElementById("view-list-btn");
 
-          let messageText = `Hi ${name}, your appointment on ${date} has been ${action ? action.toLowerCase() : "processed"}.`;
-          let submitButtonText = "Send";
-          let submitButtonClass = "btn btn-primary";
+    // --- Filter containers ---
+    const pendingContainer = document.getElementById("pending-container");
+    const acceptedContainer = document.getElementById("accepted-container");
+    const rejectedContainer = document.getElementById("rejected-container");
+    const rescheduledContainer = document.getElementById("rescheduled-container");
 
-          if (action === "Accepted") {
-            submitButtonText = "Confirm Acceptance";
-            submitButtonClass = "btn btn-success";
-          } else if (action === "Rejected") {
-            submitButtonText = "Confirm Rejection";
-            submitButtonClass = "btn btn-danger";
-          } else if (action === "Rescheduled") {
-            submitButtonText = "Confirm Reschedule";
-            submitButtonClass = "btn btn-warning";
-          }
+    // --- Filter buttons ---
+    const btnShowAll = document.getElementById("btn-showall");
+    const btnPending = document.getElementById("btn-pending");
+    const btnAccepted = document.getElementById("btn-accepted");
+    const btnRejected = document.getElementById("btn-rejected");
+    const btnRescheduled = document.getElementById("btn-rescheduled");
 
-          document.getElementById("modalMessage").value = messageText;
-          modalSubmitButton.textContent = submitButtonText;
-          modalSubmitButton.className = submitButtonClass;
-        }
+    const filterButtons = [btnShowAll, btnPending, btnAccepted, btnRejected, btnRescheduled];
+    const viewButtons = [btnCards, btnList];
+
+    // --- Helper: Show Only ---
+    function showOnly(targetContainer) {
+      [pendingContainer, acceptedContainer, rejectedContainer, rescheduledContainer].forEach(c => {
+        if (c) c.style.display = "none";
+      });
+      if (targetContainer) targetContainer.style.display = "block";
+    }
+
+    // --- Helper: Show All ---
+    function showAll() {
+      [pendingContainer, acceptedContainer, rejectedContainer, rescheduledContainer].forEach(c => {
+        if (c) c.style.display = "block";
       });
     }
 
-    // Toggle Views
-    const cardViewBtn = document.getElementById("view-cards-btn");
-    const listViewBtn = document.getElementById("view-list-btn");
-    const container = document.getElementById("appointmentsContainer");
-
-    if (cardViewBtn && listViewBtn && container) {
-      cardViewBtn.addEventListener("click", function () {
-        container.className = "view-cards";
-        cardViewBtn.classList.add("active");
-        listViewBtn.classList.remove("active");
+    // --- Helper: Highlight Active Button ---
+    function setActive(button, buttonGroup) {
+      buttonGroup.forEach(b => {
+        if (b) b.classList.remove("active");
       });
-      listViewBtn.addEventListener("click", function () {
-        container.className = "view-list";
-        listViewBtn.classList.add("active");
-        cardViewBtn.classList.remove("active");
+      if (button) button.classList.add("active");
+    }
+
+    // --- View Button Logic ---
+    if (btnCards) {
+      btnCards.addEventListener("click", function () {
+        appointmentsContainer.classList.add("view-cards");
+        appointmentsContainer.classList.remove("view-list");
+        setActive(btnCards, viewButtons);
       });
     }
+
+    if (btnList) {
+      btnList.addEventListener("click", function () {
+        appointmentsContainer.classList.add("view-list");
+        appointmentsContainer.classList.remove("view-cards");
+        setActive(btnList, viewButtons);
+      });
+    }
+
+    // --- Filter Button Logic ---
+    if (btnShowAll) {
+      btnShowAll.addEventListener("click", function () {
+        showAll();
+        setActive(btnShowAll, filterButtons);
+      });
+    }
+
+    if (btnPending) {
+      btnPending.addEventListener("click", function () {
+        showOnly(pendingContainer);
+        setActive(btnPending, filterButtons);
+      });
+    }
+
+    if (btnAccepted) {
+      btnAccepted.addEventListener("click", function () {
+        showOnly(acceptedContainer);
+        setActive(btnAccepted, filterButtons);
+      });
+    }
+
+    if (btnRejected) {
+      btnRejected.addEventListener("click", function () {
+        showOnly(rejectedContainer);
+        setActive(btnRejected, filterButtons);
+      });
+    }
+
+    if (btnRescheduled) {
+      btnRescheduled.addEventListener("click", function () {
+        showOnly(rescheduledContainer);
+        setActive(btnRescheduled, filterButtons);
+      });
+    }
+
+    // --- Defaults ---
+    setActive(btnCards, viewButtons); // Default to card view
+    setActive(btnShowAll, filterButtons); // Default to show all
   });
 </script>
+
+
+
 {% endblock content %}
