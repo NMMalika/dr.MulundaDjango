@@ -17,5 +17,10 @@ class CommentForm(forms.ModelForm):
     
 
 class ReplyForm(forms.Form):
-    subject = forms.CharField(max_length=200)
-    body = forms.CharField(widget=forms.Textarea)
+    subject = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'vTextField'}), # Use admin styles
+    )
+    body = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'vLargeTextField', 'rows': 10}), # Use admin styles
+    )

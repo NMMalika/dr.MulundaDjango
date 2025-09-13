@@ -1,0 +1,119 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="contact-message-container">
+
+    <h1 class="page-title">
+        📩 Contact Message - {{ original.name }}
+    </h1>
+
+    <div class="message-card">
+        <div class="message-header">
+            <h2>{{ original.subject }}</h2>
+            <p><strong>From:</strong> {{ original.name }} ({{ original.email }})</p>
+            <p><strong>Location:</strong> {{ original.location }}</p>
+            <p><strong>Phone:</strong> {{ original.phone_number }}</p>
+            <p><strong>Date:</strong> {{ original.created_at }}</p>
+        </div>
+
+        <div class="message-body">
+            <p>{{ original.message|linebreaks }}</p>
+        </div>
+
+        <div class="message-status">
+            {% if original.replied %}
+            <span class="status replied">✔ Already Replied</span>
+            {% else %}
+            <span class="status pending">⏳ Not Replied</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="submit-row custom-actions">
+        <form method="post">{% csrf_token %}
+           
+            <div class="buttons">
+                <input type="submit" value="{% trans 'Save' %}" class="default">
+                <a href="{% url 'admin:doctor_contactmessage_delete' original.pk %}" class="deletelink">Delete</a>
+                {% if reply_button %}
+                {{ reply_button|safe }}
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .contact-message-container {
+        max-width: 800px;
+        margin: 0 auto;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .page-title {
+        margin-bottom: 20px;
+        font-size: 22px;
+    }
+
+    .message-card {
+        background: #1e1e2f;
+        color: #eee;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        margin-bottom: 20px;
+    }
+
+    .message-header h2 {
+        margin: 0 0 10px 0;
+        font-size: 18px;
+        color: #fff;
+    }
+
+    .message-body {
+        background: #2b2b3d;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+
+    .message-body p {
+        margin: 0;
+    }
+
+    .message-status {
+        margin-top: 10px;
+    }
+
+    .status {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: bold;
+    }
+
+    .status.replied {
+        background: #2d8a4b;
+        color: #fff;
+    }
+
+    .status.pending {
+        background: #b94a48;
+        color: #fff;
+    }
+
+    .custom-actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        background: #1b1b2b;
+        border-radius: 8px;
+    }
+
+    .buttons a,
+    .buttons input,
+    .buttons .button {
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
