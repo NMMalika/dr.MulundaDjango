@@ -3,6 +3,7 @@
 from pathlib import Path
 from decouple import config
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,9 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SK")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.drjackiegyna.co.ke", "drjackiegyna.co.ke"]
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -110,11 +112,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
-if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-else:
-    STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Your static files directory
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -134,3 +136,68 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Dr.Jackie-Gyna Admin",
+    "site_header": "Dr.Jackie-Gyna Dashboard",
+    "site_brand": "Dr.Jackie-Gyna",
+    "welcome_sign": "Welcome to Dr.Jackie-Gyna Admin Panel",
+
+    # Logo and icons
+    "site_logo": "assets/img/favicon.ico",   
+    "site_logo_classes": "img-circle",
+    "site_icon": "assets/img/favicon.ico",
+
+    "copyright": "Dr. Jackie Mulunda",
+    "search_model": ["doctor.Appointment", "doctor.Blogs"],
+
+    # Top menu (navigation bar)
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "doctor.Appointment"},
+        {"model": "doctor.Blogs"},
+        {"app": "doctor"},
+    ],
+
+    # Icons for models (FontAwesome)
+    "icons": {
+        "doctor.Appointment": "fas fa-calendar-check",
+        "doctor.Blogs": "fas fa-blog",
+        "doctor.Comment": "fas fa-comments",
+        "doctor.ContactMessage": "fas fa-envelope",
+        "doctor.FAQ": "fas fa-question-circle",
+        "doctor.Testimonial": "fas fa-star",
+        "doctor.Service": "fas fa-stethoscope",
+    },
+
+   
+    "show_ui_builder": True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "pink",
+    "accent": "pink",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-pink",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "darkly",
+    "dark_mode_theme": "cyborg",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary"
+    }
+}
