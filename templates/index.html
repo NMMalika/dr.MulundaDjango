@@ -9,11 +9,10 @@
             <div class="container position-relative">
                 <div class="row gy-5" data-aos="fade-in">
                     <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center text-center text-lg-start">
-                        <h2>Dr. Jackie-Gyna</h2>
-                        <p>Everything Female Health and Wellness</p>
+                       <h2 class="fw-bold ">Dr. Jackie-Gyna</h2>
+                        <p class="fizzy-text" >Everything Female Health and Wellness</p>
                         <div class="d-flex justify-content-center justify-content-lg-start">
-                            <a href="#services" class="btn-get-started">BookAppointment</a>
-                            <a href="" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
+                            <a href="#booking-section" class="btn-get-started">BookAppointment</a>
                         </div>
                     </div>
                     <div class="col-lg-6 order-1 order-lg-2">
@@ -26,17 +25,23 @@
        
         <section id="booking-section" class="booking-section overlap-hero">
             <div class="container">
-                 <!-- ✅ FLASH MESSAGE BLOCK AT TOP OF SECTION -->
-                   {% if messages %}
-                   <div class="mt-3">
-                     {% for message in messages %}
-                     <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                          {{ message }}
-                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                     </div>
-                      {% endfor %}
-                  </div>
-                {% endif %}
+        <!-- ✅ FLASH MESSAGE BLOCK AT TOP OF SECTION -->
+        {% if messages %}
+        <div class="mt-3">
+            {% for message in messages %}
+            <div class="custom-alert alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <span class="alert-icon">
+                    {% if message.tags == 'success' %}<i class="fas fa-check-circle"></i>{% endif %}
+                    {% if message.tags == 'info' %}<i class="fas fa-info-circle"></i>{% endif %}
+                    {% if message.tags == 'warning' %}<i class="fas fa-exclamation-triangle"></i>{% endif %}
+                    {% if message.tags == 'danger' %}<i class="fas fa-times-circle"></i>{% endif %}
+                </span>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
   <!-- Rest of your booking section content -->
                 <div class="row g-4 align-items-stretch">
@@ -66,8 +71,8 @@
                                     <td class="text-end">8:00 - 17:00</td>
                                 </tr>
                                 <tr>
-                                    <td>Sunday</td>
-                                    <td class="text-end">8:00 - 17:00</td>
+                                    <td>Saturday</td>
+                                    <td class="text-end">8:00 - 12:00</td>
                                 </tr>
                             </table>
                         </div>
@@ -125,101 +130,28 @@
 
         <main id="main">
             <!-- ======= Our Services Section ======= -->
-            <section id="services" class="services sections-bg">
-                <div class="container" data-aos="fade-up">
-                    <div class="section-header">
-                        <h2>Our Services</h2>
+           <section id="services" class="services sections-bg">
+    <div class="container" data-aos="fade-up">
+        <div class="section-header">
+            <h2>Our Services</h2>
+        </div>
+
+        <div class="row gy-4" data-aos="fade-up" data-aos-delay="100">
+            {% for service in services %}
+            <div class="col-lg-4 col-md-6">
+                <div class="service-item position-relative">
+                    <div class="icon">
+                        <i class="{{ service.icon }}"></i>
                     </div>
-
-                    <div class="row gy-4" data-aos="fade-up" data-aos-delay="100">
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="bi bi-clipboard2-heart"></i>
-                                </div>
-                                <h3>General Women’s Health Checkups</h3>
-                                <p>Routine physical and pelvic exams, Pap smears, breast exams.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="fas fa-baby"></i>
-                                </div>
-                                <h3>Pregnancy Care (Antenatal & Postnatal)</h3>
-                                <p>preconception care ,pregnancy monitoring, and postnatal support.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="fas fa-pills"></i>
-                                </div>
-                                <h3>Family Planning & Contraception</h3>
-                                <p> ALL Birth control options, IUDs, implants, counseling.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="bi bi-droplet-half"></i>
-                                </div>
-                                <h3>Menstrual Disorders</h3>
-                                <p>Irregular periods, heavy bleeding, PCOS, Missed periods.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="bi bi-flower1"></i>
-                                </div>
-                                <h3>Fertility & Infertility Treatment</h3>
-                                <p>Diagnosis and treatment of infertility.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="fas fa-stethoscope"></i>
-                                </div>
-                                <h3>Gynecologic Procedures</h3>
-                                <p>surgical interventions performed on the female reproductive system, for diagnosis and treatment </p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="fas fa-stethoscope"></i>
-                                </div>
-                                <h3>Perimenopause and Menopause Coaching</h3>
-                                <p>Support and guidance for women navigating the challenges of perimenopause and Menopause.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-                        <div class="col-lg-4 col-md-6">
-                            <div class="service-item position-relative">
-                                <div class="icon">
-                                    <i class="fas fa-stethoscope"></i>
-                                </div>
-                                <h3>Hormonal Imbalance</h3>
-                                <p>Support and guidance for women experiencing hormonal imbalances.</p>
-                            </div>
-                        </div>
-                        <!-- End Service Item -->
-                    </div>
+                    <h3>{{ service.title }}</h3>
+                    <p>{{ service.description | safe }}</p>
                 </div>
-            </section>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
             <!-- End Our Services Section -->
 
             <!-- ======= Testimonials Section ======= -->
@@ -229,76 +161,40 @@
                         <h2>Testimonials</h2>
                     </div>
 
-                    <div class="slides-3 swiper" data-aos="fade-up" data-aos-delay="100">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
-                                <div class="testimonial-wrap">
-                                    <div class="testimonial-item">
-                                        <div class="d-flex align-items-center">
-                                            <img src="{% static "assets/img/testimonials/" %}" class="testimonial-img flex-shrink-0" alt="" />
-                                            <div>
-                                                <h3>C. K. O.</h3>
-                                                <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                                            </div>
-                                        </div>
-                                        <p>
-                                            <i class="bi bi-quote quote-icon-left"></i>
-                                            Mmh although it was a difficult journey,you never gave up on me...the complications..oh my .u covered them well.. your tender care , resilient, determination and passion led me being a mother... thanks for standing with women who have issues with fertility and child birth.. it's through your tiress efforts that I can smile.. May you be blessed 🙏 Doc..🥰
-                                            <i class="bi bi-quote quote-icon-right"></i>
-                                        </p>
-                                    </div>
-                                </div>
+                   <div class="slides-3 swiper" data-aos="fade-up" data-aos-delay="100">
+    <div class="swiper-wrapper">
+        {% for testimonial in testimonials %}
+        <div class="swiper-slide">
+            <div class="testimonial-wrap">
+                <div class="testimonial-item">
+                    <div class="d-flex align-items-center">
+                        {% if testimonial.image %}
+                            <img src="{{ testimonial.image.url }}" class="testimonial-img flex-shrink-0" alt="{{ testimonial.name }}">
+                        {% else %}
+                            <img src="{% static 'assets/img/avatar.jpeg' %}" class="testimonial-img flex-shrink-0" alt="{{ testimonial.name }}">
+                        {% endif %}
+                        <div>
+                            <h3>{{ testimonial.name }}</h3>
+                            <div class="stars">
+                                {% for i in "12345"|slice:":testimonial.stars" %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% endfor %}
                             </div>
-                            <!-- End testimonial item -->
-                            <div class="swiper-slide">
-                                <div class="testimonial-wrap">
-                                    <div class="testimonial-item">
-                                        <div class="d-flex align-items-center">
-                                            <img src="{% static "assets/img/testimonials/" %}" class="testimonial-img flex-shrink-0" alt="" />
-                                            <div>
-                                                <h3>Z.K.O.</h3>
-                                                <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                                            </div>
-                                        </div>
-                                        <p>
-                                            <i class="bi bi-quote quote-icon-left"></i>
-                                            First am greatful for everything you did while I was expecting. I never thought that I will hold my rainbow baby but through your motherly love and care am enjoying motherhood . A lot was happening by  then marital issues due to too much miscarriages which made my partner distance himself because he wasn't sure whether I would make it again. But I thank God, you came in discovered the major reason of my losses "IC" .   I remember on 9th Aug 2023 when I was being wheeled to theater to get  cerclage done I was  filled with fear, my hopes was getting slim but you encouraged me, prayed for me and  counseled me until my BP was no more. You went beyond your professionalism by understanding my financial situation, the distance I covering for follow ups just to make sure that me and my unborn baby is safe. The journey wasn't easy but God used you in a might way to make it way manageable through the right medication and dietary guidance. During delivery you understood my pain and made sure I had the right support system in your facility hence making me feel less lonely until I got discharged with my bundle of joy. Given a chance I can still chose you as my gyna. I will still keep my promise of referring as many as I can, a sign of gratitude for everything you did to me. Thank you and may God bless you
-                                            <i class="bi bi-quote quote-icon-right"></i>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End testimonial item -->
-
-                            <div class="swiper-slide">
-                                <div class="testimonial-wrap">
-                                    <div class="testimonial-item">
-                                        <div class="d-flex align-items-center">
-                                            <img src="assets/img/testimonials/" class="testimonial-img flex-shrink-0" alt="" />
-                                            <div>
-                                                <h3>L. K. K.</h3>
-
-                                                <div class="stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                                            </div>
-                                        </div>
-                                        <p>
-                                            <i class="bi bi-quote quote-icon-left"></i>
-                                            My journey with Dr. Jackline Mulunda. 
-
-                                             I first met Dr. Jackline Mulunda by what I now believe was a blessing in disguise. I had gone to see a male gynecologist whom a friend had recommended, but he happened to be unavailable that day. Dr. Mulunda was filling in for him and that chance meeting changed everything.
-
-                                             During our first encounter, I opened up to her about the many complications i have endured. The losses, the fears and the emotional toll it had taken on me. She listened with genuine care and compassion. She was warm, attentive, and reassuring and I felt an instant connection with her. She walked with me every step of the way throughout my pregnancy, offering not just medical expertise, but emotional strength and comfort. Thanks to her exceptional care, I recently welcomed my second daughter after so many losses. 
-
-                                             I’m deeply grateful to have crossed paths with Dr. Mulunda. Her dedication and kindness have made all the difference in my life, and I couldn’t have asked for a better doctor to guide me through such a delicate chapter. Thank you big time.
-                                            <i class="bi bi-quote quote-icon-right"></i>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End testimonial item -->
                         </div>
-                        <div class="swiper-pagination"></div>
                     </div>
+                    <p>
+                        <i class="bi bi-quote quote-icon-left"></i>
+                        {{ testimonial.content |safe}}
+                        <i class="bi bi-quote quote-icon-right"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
                 </div>
             </section>
             <!-- End Testimonials Section -->
@@ -316,91 +212,24 @@
                           
                         <div class="col-lg-8">
                             <div class="accordion accordion-flush" id="faqlist" data-aos="fade-up" data-aos-delay="100">
-                                <hr>
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header">
-                                       
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-1">
-                                            <span class="num">1.</span>
-                                            What do Dr Jackie do?
-                                        </button>
-                                    </h3>
-                                    <div id="faq-content-1" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-                                        <div class="accordion-body">
-                                            i care for the women reproductive health when she gets her period to the post-menopause stage.
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- # Faq item-->
+    <hr>
+    {% for faq in faqs %}
+    <div class="accordion-item">
+        <h3 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-{{ forloop.counter }}">
+                <span class="num">{{ forloop.counter }}.</span>
+                {{ faq.question }}
+            </button>
+        </h3>
+        <div id="faq-content-{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#faqlist">
+            <div class="accordion-body">
+                {{ faq.answer|safe }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-2">
-                                            <span class="num">2.</span>
-                                            Why would you see Dr Jackie?
-                                        </button>
-                                    </h3>
-                                    <div id="faq-content-2" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-                                        <div class="accordion-body">
-                                            i will help you in annual screening and health concerns on vaginal, vulvar, pelvic and uterus bleeding.
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- # Faq item-->
-
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-3">
-                                            <span class="num">3.</span>
-                                            Is it normal to have vaginal discharge?
-                                        </button>
-                                    </h3>
-                                    <div id="faq-content-3" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-                                        <div class="accordion-body">
-                                            Vaginal discharge is your body’s cleansing mechanism. It is normal to have clear or milky discharge, but in case you notice a variation in the color, odour or volume (unusually high), it may be a
-                                            sign of infection. Rush to book appointment for immediate evaluation.
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- # Faq item-->
-
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-4">
-                                            <span class="num">4.</span>
-                                            Is it normal to have painful sexual intercourse??
-                                        </button>
-                                    </h3>
-                                    <div id="faq-content-4" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-                                        <div class="accordion-body">
-                                            <p>Painful sex may be a result of the following situations:</p>
-                                            <ul>
-                                                <li>Inadequate lubrication due to lack of foreplay or medication</li>
-                                                <li>Infection</li>
-                                                <li>Thinning of the vaginal walls</li>
-                                            </ul>
-                                            <p>Book appointment will examine the situation and will also walk you through various treatment options available.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- # Faq item-->
-
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-content-5">
-                                            <span class="num">5.</span>
-                                            When is the best time to get pregnant?
-                                        </button>
-                                    </h3>
-                                    <div id="faq-content-5" class="accordion-collapse collapse" data-bs-parent="#faqlist">
-                                        <div class="accordion-body">
-                                            Whether or not it’s your first time, i will help you avoid a lot of complications, such as miscarriage. Based on the evaluation, i will tell you if your reproductive system is healthy enough to
-                                            bear a baby.
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- # Faq item-->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -411,42 +240,56 @@
             <!-- ======= Recent Blog Posts Section ======= -->
             <section id="recent-posts" class="recent-posts sections-bg">
                 <div class="container" data-aos="fade-up">
+            
                     <div class="section-header">
                         <h2>Recent Blog Posts</h2>
                     </div>
+                                              <div class="row gy-4">
+      {% for blog in recent_blogs %}
 
-                    <div class="row gy-4">
-                     {% for blog in recent_blogs %}
-                        <div class="col-xl-4 col-md-6">
-                            <article>
-                                <div class="post-img">
-                                    <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="img-fluid" />
-                                </div>
+          <div class="col-xl-4 col-md-6">
+            <article>
 
-                                <p class="post-category">{{ blog.category }}</p>
+              <div class="post-img">
+                <img src="{{ blog.blog_image.url }}" alt="{{ blog.title }}" class="img-fluid">
+              </div>
 
-                                <h2 class="title">
-                                    <a href="{% url 'blogdetail' blog_id=blog.id %}">{{ blog.title }}</a>
-                                </h2>
+              <p class="post-category">{{ blog.category }}</p>
 
-                                <div class="d-flex align-items-center">
-                                    <div class="post-meta">
-                                        <p class="post-author">{{ blog.author }}</p>
-                                        <p class="post-date">
-                                            <time datetime="{{ blog.created_at|date:"c" }}">{{ blog.created_at|date:"M d, Y" }}</time>
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        <!-- End post list item -->
+              <h2 class="title">
+                <a href="{% url 'blogdetail' blog_id=blog.id %}">{{ blog.title }}</a>
+              </h2>
 
-                    {% endfor %}
-                    </div>
-                    <!-- End recent posts list -->
+              <div class="d-flex align-items-center">
+                <img src="{% static 'assets/img/blog/' %}" alt="" class="img-fluid post-author-img flex-shrink-0">
+                <div class="post-meta">
+                  <p class="post-author-list">{{ blog.author }}</p>
+                  <p class="post-date">
+                    <time datetime="2022-01-01">{{ blog.created_at|date:"M d, Y" }}</time>
+                  </p>
                 </div>
-            </section>
-            <!-- End Recent Blog Posts Section -->
+              </div>
+
+            </article>
+          </div><!-- End post list item -->
+
+          {% endfor %}
+
+</div>
+
+<!-- View All Blogs Button -->
+<div class="text-center mt-4">
+    <a href="{% url 'blog' %}" class="btn btn-primary px-4 py-2 rounded-pill">
+        View All Blogs
+    </a>
+</div>
+
+
+            
+            
+            
+            
+            </section><!-- End Recent Blog Posts Section -->
 
             <!-- ======= Contact Section ======= -->
             <section id="contact" class="contact">
@@ -471,7 +314,7 @@
                                     <i class="bi bi-envelope flex-shrink-0"></i>
                                     <div>
                                         <h4>Email:</h4>
-                                        <p>info@drjackiethegyna.com</p>
+                                        <p>drjackiemulunda@gmail.com</p>
                                     </div>
                                 </div>
                                 <!-- End Info Item -->
@@ -538,5 +381,8 @@
             <!-- End Contact Section -->
         </main>
         <!-- End #main -->
+        
+        
+      
 {% endblock content%}
   

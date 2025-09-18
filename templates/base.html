@@ -2,152 +2,247 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-        <title>Dr. Jackie Mulunda</title>
-        <meta name="description" content="Dr. Jackline Mulunda is a trusted gynecologist in Kisii, Kenya, offering expert women's health care and fertility services. Recognized as one of the best doctors in the Nyanza region." />
-        <meta name="keywords" content="Gynecologist in Kisii, Dr. Jackline Mulunda, best doctor in Nyanza, women's health Kisii, fertility clinic Kenya, Kisii gynecology services, OB-GYN Nyanza" />
-        <meta name="author" content="NimCity Tech Enterprises" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="robots" content="index, follow">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-        <!-- Favicons -->
-        <link href="{% static 'assets/img/favicon.ico' %}" rel="icon" />
-        <link href="{% static 'assets/img/favicon.ico' %}" rel="apple-touch-icon" />       
+    <title>Dr. Jackie Mulunda</title>
+    <meta name="description"
+        content="Dr. Jackline Mulunda is a trusted gynecologist in Kisii, Kenya, offering expert women's health care and fertility services. Recognized as one of the best doctors in the Nyanza region." />
+    <meta name="keywords"
+        content="Gynecologist in Kisii, Dr. Jackline Mulunda, best doctor in Nyanza, women's health Kisii, fertility clinic Kenya, Kisii gynecology services, OB-GYN Nyanza" />
+    <meta name="author" content="NimCity Tech Enterprises" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow">
 
-        <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-            rel="stylesheet"
-        />
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/favicon.ico' %}" rel="icon" />
+    <link href="{% static 'assets/img/favicon.ico' %}" rel="apple-touch-icon" />
 
-        <!-- Icon Font Stylesheet -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
 
-        <!-- Vendor CSS Files -->
-        <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
-        <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
-        <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet" />
-        <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet" />
-        <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet" />
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Template Main CSS File -->
-        <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" />
-    </head>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <body>
-        <!-- ======= Header ======= -->
-        <div class="fixed-top" style="z-index: 1030;">
-            <!-- you can move z-index to CSS -->
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet" />
 
-            <!-- ======= Topbar ======= -->
-            <div class="container-fluid bg-light ps-5 pe-0 d-none d-lg-block">
-                <div class="row gx-0">
-                    <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
-                        <div class="d-inline-flex align-items-center">
-                            <small class="py-2">
-                                <i class="far fa-clock text-primary me-2"></i>
-                                Opening Hours: Mon - Fri : 6.00 am - 10.00 pm, Sunday Closed
-                            </small>
-                        </div>
+    <!-- Template Main CSS File -->
+    <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" />
+
+    <!-- JSON-LD Schema for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    <!-- ✅ Medical Business Schema -->
+    {
+      "@type": "MedicalBusiness",
+      "name": "Dr. Jackie-Gyna",
+      "url": "https://drjackiegyna.co.ke/",
+      "logo": "{% static 'assets/img/favicon.ico' %}",
+      "image": "{% static 'assets/img/favicon.ico' %}",
+      "description": "Expert gynecology and women’s health care services by Dr. Jackline Mulunda in Kisii, Kenya.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kisii",
+        "addressRegion": "Nyanza",
+        "addressCountry": "Kenya"
+      },
+      "telephone": "+254735319848",
+      "email": "drjackiemulunda@gmail.com",
+      "openingHours": "Mo-Fr 06:00-22:00",
+      "department": [
+        {% for service in services %}
+        {
+          "@type": "MedicalSpecialty",
+          "name": "{{ service.name|escapejs }}",
+          "description": "{{ service.description|truncatewords:25|escapejs }}",
+          "url": "{% url 'home' %}#services"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ]
+    },
+
+    <!-- ✅ Blogs Schema -->
+    {% for blog in recent_blogs %}
+    {
+      "@type": "BlogPosting",
+      "headline": "{{ blog.title|escapejs }}",
+      "description": "{{ blog.content|truncatewords:30|escapejs }}",
+      "image": "{% if blog.image %}{{ blog.image.url }}{% else %}{% static 'assets/img/default-blog.jpg' %}{% endif %}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ blog.author|default:'Admin' }}"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Dr. Jackie-Gyna",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{% static 'assets/img/favicon.ico' %}"
+        }
+      },
+      "datePublished": "{{ blog.created_at|date:'c' }}",
+      "dateModified": "{{ blog.updated_at|date:'c' }}",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{% url 'blogdetail' blog.id %}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %},
+
+    <!-- ✅ FAQ Schema -->
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% for faq in faqs %}
+        {
+          "@type": "Question",
+          "name": "{{ faq.question|escapejs }}",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "{{ faq.answer|linebreaksbr|escapejs }}"
+          }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }
+
+  ]
+}
+</script>
+
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+<body>
+    <!-- ======= Header ======= -->
+    <div class="fixed-top" style="z-index: 1030;">
+        <!-- you can move z-index to CSS -->
+
+        <!-- ======= Topbar ======= -->
+        <div class="container-fluid bg-light ps-5 pe-0 d-none d-lg-block">
+            <div class="row gx-0">
+                <div class="col-md-6 text-center text-lg-start mb-2 mb-lg-0">
+                    <div class="d-inline-flex align-items-center">
+                        <small class="py-2">
+                            <i class="far fa-clock text-primary me-2"></i>
+                            Opening Hours: Mon - Fri : 8.00 am - 5.00 pm, Sunday Closed
+                        </small>
                     </div>
-                    <div class="col-md-6 text-center text-lg-end">
-                        <div class="position-relative d-inline-flex align-items-center bg-primary text-white top-shape px-5">
-                            <div class="me-3 pe-3 border-end py-2">
-                                <p class="m-0"><i class="fa fa-envelope-open me-2"></i>info@drjackiethegyna.com</p>
-                            </div>
-                            <div class="me-3 pe-3 border-end py-2">
-                                <p class="m-0">
-                                    <i class="fa fa-phone-alt me-2"></i>
-                                    <a href="tel:+254735319848" style="text-decoration: none; color: inherit;">+254735319848</a>
-                                </p>
-                            </div>
-                            <div class="d-inline-flex align-items-center py-2">
-                                <a class="text-white me-3" href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a class="text-white me-3" href="#"><i class="fab fa-twitter"></i></a>
-                                <a class="text-white" href="#"><i class="fab fa-instagram"></i></a>
-                            </div>
+                </div>
+                <div class="col-md-6 text-center text-lg-end">
+                    <div
+                        class="position-relative d-inline-flex align-items-center bg-primary text-white top-shape px-5">
+                        <div class="me-3 pe-3 border-end py-2">
+                            <p class="m-0"><i class="fa fa-envelope-open me-2"></i>drjackiemulunda@gmail.com</p>
+                        </div>
+                        <div class="me-3 pe-3 border-end py-2">
+                            <p class="m-0">
+                                <i class="fa fa-phone-alt me-2"></i>
+                                <a href="tel:+254735319848"
+                                    style="text-decoration: none; color: inherit;">+254735319848</a>
+                            </p>
+                        </div>
+                        <div class="d-inline-flex align-items-center py-2">
+                            <a class="text-white me-3" href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a class="text-white me-3" href="https://x.com/DrJackieGyna" target="_blank" rel="noopener noreferrer">
+                              <i class="fab fa-twitter"></i>
+                            </a>
+                            <a class="text-white" href="#"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- ======= End Topbar ======= -->
-
-            <!-- ======= Navbar ======= -->
-            <header id="header" class="header d-flex align-items-center" style="background: #;">
-                <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
-                    <a href="{% url 'home' %}" class="logo d-flex align-items-center">
-                        <h1>Dr.Jackie<span>.</span></h1>
-                    </a>
-                    <nav id="navbar" class="navbar">
-                        <ul>
-                            <li><a href="{% url 'home' %}">Home</a></li>
-                            <li><a href="index.html#services">Services</a></li>
-                            <li><a href="index.html#testimonials">Testimonials</a></li>
-                            <li><a href="index.html#faq">FAQ</a></li>
-                            <li><a href="{% url 'blog' %}">Blog</a></li>
-                            <li><a href="{% url 'home' %}#contact">Contact</a></li>
-                            <li>
-                                <a href="{% url 'home' %}#booking-section" class="book-btn" style="padding: 8px 16px; background-color: #007bff; color: white; border-radius: 4px; text-decoration: none;">
-                                    <i class="fas fa-calendar"></i> 
-                                    Book Appointment
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
-                    <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
-                   
-                </div>
-            </header>
-         
-            <!-- ======= End Navbar ======= -->
         </div>
 
-        <!-- End Header -->
+        <!-- ======= End Topbar ======= -->
 
-        <!-- ======= main Section ======= -->
-        
-        
-            {% block content %}
+        <!-- ======= Navbar ======= -->
+        <header id="header" class="header d-flex align-items-center" style="background: #;">
+            <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+                <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+                    <h1>Dr.Jackie-Gyna<span>.</span></h1>
+                </a>
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'home' %}#services">Services</a></li>
+                        <li><a href="{% url 'home' %}#testimonials">Testimonials</a></li>
+                        <li><a href="{% url 'home' %}#faq">FAQ</a></li>
+                        <li><a href="{% url 'blog' %}">Blog</a></li>
+                        <li><a href="{% url 'home' %}#contact">Contact</a></li>
+                        <li>
+                            <a href="{% url 'home' %}#booking-section" class="book-btn classy-nav-btn">
+                                <i class="fas fa-calendar"></i>
+                                Book Appointment
+                            </a>
+                        </li>
 
-            {% endblock content%}
-        <!-- End #main -->
+                    </ul>
+                </nav>
+                <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+                <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
 
-        <!-- ======= Footer ======= -->
-        <footer id="footer" class="footer">
-            <div class="container mt-4">
-                <div class="copyright">
-                    &copy; Copyright <strong><span>Impact</span></strong>. All Rights Reserved
-                </div>
-                <div class="credits">Designed by <a href="">NimCity Tech Enterprises</a></div>
             </div>
-        </footer>
-        <!-- End Footer -->
-       
+        </header>
 
-        <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        <!-- ======= End Navbar ======= -->
+    </div>
 
-        <div id="preloader"></div>
+    <!-- End Header -->
 
-        <!-- Vendor JS Files -->
-        <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
-        <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
-        <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
-        <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
-        
+    <!-- ======= main Section ======= -->
 
 
+    {% block content %}
 
-        <!-- Template Main JS File -->
-        <script src="{% static 'assets/js/main.js' %}"></script>
-    </body>
+    {% endblock content%}
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="container mt-4">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Dr.Jackie-Gyna</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">Designed with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="">NimCity Tech
+                    Enterprises</a></div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+
+    <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <div id="preloader"></div>
+
+    <!-- Vendor JS Files -->
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+    <!-- Template Main JS File -->
+    <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
 </html>

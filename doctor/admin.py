@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, reverse
-from .models import Appointment, Blogs, Comment, ContactMessage
+from .models import Appointment, Blogs, Comment, ContactMessage, FAQ, Testimonial, Service
 from .views import ManageAppointmentView 
 from .forms import ReplyForm
 from django.shortcuts import get_object_or_404, redirect, render
@@ -116,3 +116,19 @@ class ContactMessageAdmin(admin.ModelAdmin):
         return format_html('<a class="button" href="{}">Reply</a>', url)
 
     reply_button.short_description = "Action"
+
+
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'order')
+    ordering = ('order',)
+
+@admin.register(Testimonial)
+class TestimonialAdmin(admin.ModelAdmin):
+    list_display = ('name', 'stars', 'order')
+    ordering = ('order',)
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ("title", "icon", "created_at")
+    search_fields = ("title", "description")

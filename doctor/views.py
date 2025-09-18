@@ -5,7 +5,7 @@ from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib import messages
-from .models import Appointment, Blogs,ContactMessage
+from .models import Appointment, Blogs, ContactMessage, FAQ, Testimonial, Service
 from .forms import CommentForm
 from django.views.generic import ListView
 from django.core.paginator import Paginator
@@ -21,11 +21,25 @@ from openpyxl import Workbook
 from django.shortcuts import get_object_or_404, render, redirect
 # Create your views here.
 
+
+
 class HomeTemplateView(TemplateView):
     template_name = 'index.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        context["services"] = Service.objects.all()
+        context["recent_blogs"] = Blogs.objects.all().order_by('-created_at')[:3]
+        context["faqs"] = FAQ.objects.all()
+        context["testimonials"] = Testimonial.objects.all().order_by('order')  # Assuming you want to order by the 'order' field
+        
+        return context
+
 
 class AppointmentTemplateView(TemplateView):
     template_name = 'index.html'
+    
     
     
     
@@ -49,10 +63,7 @@ class AppointmentTemplateView(TemplateView):
             message=message
         )
 
-        messages.success(
-            request,
-            f"Thanks {name} for your appointment request. We will get back to you soon."
-        )
+        messages.success(request, f"Thanks {name}, your appointment is booked!", extra_tags='launch-confetti')
         return redirect('booking-section')
 
 class ContactTemplateView(TemplateView):
@@ -218,6 +229,8 @@ def blogdetail(request, blog_id):
         'form': form,
         'comments': comments
     })
+    
+
 
       
 
@@ -234,11 +247,17 @@ def export_appointments_pdf(request):
     # Title
     elements.append(Paragraph("Appointments Report", styles['Heading1']))
 
-    # Table data
-    data = [["Name", "Email", "Phone", "Date", "Message"]]
+    # Table data with status included
+    data = [["Name", "Email", "Phone", "Date", "Message", "Status"]]
     for appt in Appointment.objects.all():
-        data.append([appt.name, appt.email, appt.phone,
-                     appt.date.strftime("%d-%m-%Y"), appt.message])
+        data.append([
+            appt.name,
+            appt.email,
+            appt.phone,
+            appt.date.strftime("%d-%m-%Y"),
+            appt.message,
+            appt.status   # <-- New status column
+        ])
 
     # Create table
     table = Table(data, repeatRows=1)
@@ -256,19 +275,26 @@ def export_appointments_pdf(request):
     return FileResponse(buffer, as_attachment=True, filename="appointments.pdf")
 
 
+
 # --- EXCEL EXPORT ---
 def export_appointments_excel(request):
     wb = Workbook()
     ws = wb.active
     ws.title = "Appointments"
 
-    # Headers
-    ws.append(["Name", "Email", "Phone", "Date", "Message"])
+    # Headers (added Status column)
+    ws.append(["Name", "Email", "Phone", "Date", "Message", "Status"])
 
     # Data rows
     for appt in Appointment.objects.all():
-        ws.append([appt.name, appt.email, appt.phone,
-                   appt.date.strftime("%d-%m-%Y"), appt.message])
+        ws.append([
+            appt.name,
+            appt.email,
+            appt.phone,
+            appt.date.strftime("%d-%m-%Y"),
+            appt.message,
+            appt.status   # <-- New status column
+        ])
 
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -276,5 +302,3 @@ def export_appointments_excel(request):
     response["Content-Disposition"] = 'attachment; filename="appointments.xlsx"'
     wb.save(response)
     return response
-  
-   

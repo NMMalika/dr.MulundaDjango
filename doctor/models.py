@@ -85,3 +85,42 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+
+class FAQ(models.Model):
+    question = models.CharField(max_length=255)
+    answer = RichTextUploadingField()
+    order = models.PositiveIntegerField(default=0)  # to control the order of display
+
+    class Meta:
+        ordering = ['order']  # ensures FAQs display in correct order
+
+    def __str__(self):
+        return self.question
+
+class Testimonial(models.Model):
+    name = models.CharField(max_length=100)   # e.g. "C. K. O."
+    content = RichTextUploadingField()             # the testimonial text
+    image = models.ImageField(upload_to="testimonials/", blank=True, null=True)  
+    stars = models.PositiveIntegerField(default=5)  # 1–5 stars rating
+    order = models.PositiveIntegerField(default=0)  # for custom ordering
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.name
+
+class Service(models.Model):
+    title = models.CharField(max_length=255)
+    description = RichTextUploadingField()
+    icon = models.CharField(
+        max_length=50,
+        help_text="Enter icon class e.g. 'bi bi-clipboard2-heart' or 'fas fa-baby'"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return self.title

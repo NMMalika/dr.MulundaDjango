@@ -288,3 +288,11 @@ document.addEventListener("scroll", function () {
     });
   }
 });
+
+ document.addEventListener("DOMContentLoaded", function () {
+   const heading = document.querySelector(".hero h2");
+   // match typing duration (3s in this case)
+   setTimeout(() => {
+     heading.classList.add("finished");
+   }, 3000);
+ });

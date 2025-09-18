@@ -1,12 +1,25 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-<h2>Reply to {{ contact.name }} ({{ contact.email }})</h2>
-
-<form method="post">{% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" value="Send Reply" class="default">
-</form>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Reply to {{ contact.name }}</h4>
+            <small>{{ contact.email }}</small>
+        </div>
+        <div class="card-body">
+            <form method="post" class="form">{% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-paper-plane"></i> Send Reply
+                </button>
+                <a href="{% url 'admin:doctor_contactmessage_changelist' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
