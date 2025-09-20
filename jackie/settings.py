@@ -1,29 +1,49 @@
-
-
 from pathlib import Path
 from decouple import config
+import environ
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# ------------------------------------------------------------------------------
+# Core Settings
+# ------------------------------------------------------------------------------
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SK")
+SECRET_KEY = config("DJANGO_SECRET_KEY", default="insecure-key-for-dev")
+DEBUG = config("DEBUG", default=True, cast=bool)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+ALLOWED_HOSTS = [
+    
+]
 
-ALLOWED_HOSTS = ["www.drjackiegyna.co.ke", "drjackiegyna.co.ke"]
+# ------------------------------------------------------------------------------
+# Security (only enforced in production)
+# ------------------------------------------------------------------------------
 
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
 
-# Application definition
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# ------------------------------------------------------------------------------
+# Application Definition
+# ------------------------------------------------------------------------------
 
 INSTALLED_APPS = [
-    'jazzmin',
+    "django_ckeditor_5",
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -34,6 +54,7 @@ INSTALLED_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "widget_tweaks",
+    
 ]
 
 MIDDLEWARE = [
@@ -66,9 +87,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "jackie.wsgi.application"
 
-
+# ------------------------------------------------------------------------------
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+# ------------------------------------------------------------------------------
 
 DATABASES = {
     "default": {
@@ -77,89 +98,74 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# ------------------------------------------------------------------------------
+# Password Validation
+# ------------------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
+# ------------------------------------------------------------------------------
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
+# ------------------------------------------------------------------------------
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Africa/Nairobi"
-
 USE_I18N = True
-
 USE_TZ = True
 
+# ------------------------------------------------------------------------------
+# Static & Media Files
+# ------------------------------------------------------------------------------
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Your static files directory
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# ------------------------------------------------------------------------------
+# Email
+# ------------------------------------------------------------------------------
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-#Sending Emails
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "drjackiemulunda@gmail.com"
-EMAIL_HOST_PASSWORD =  "hpuknrupeatqdxqp"
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# ------------------------------------------------------------------------------
+# CKEditor
+# ------------------------------------------------------------------------------
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
+# ------------------------------------------------------------------------------
+# Jazzmin Admin Customization
+# ------------------------------------------------------------------------------
 
 JAZZMIN_SETTINGS = {
     "site_title": "Dr.Jackie-Gyna Admin",
     "site_header": "Dr.Jackie-Gyna Dashboard",
     "site_brand": "Dr.Jackie-Gyna",
     "welcome_sign": "Welcome to Dr.Jackie-Gyna Admin Panel",
-
-    # Logo and icons
-    "site_logo": "assets/img/favicon.ico",   
+    "site_logo": "assets/img/favicon.ico",
     "site_logo_classes": "img-circle",
     "site_icon": "assets/img/favicon.ico",
-
     "copyright": "Dr. Jackie Mulunda",
     "search_model": ["doctor.Appointment", "doctor.Blogs"],
-
-    # Top menu (navigation bar)
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
         {"model": "doctor.Appointment"},
         {"model": "doctor.Blogs"},
         {"app": "doctor"},
     ],
-
-    # Icons for models (FontAwesome)
     "icons": {
         "doctor.Appointment": "fas fa-calendar-check",
         "doctor.Blogs": "fas fa-blog",
@@ -169,8 +175,6 @@ JAZZMIN_SETTINGS = {
         "doctor.Testimonial": "fas fa-star",
         "doctor.Service": "fas fa-stethoscope",
     },
-
-   
     "show_ui_builder": True,
 }
 
@@ -196,8 +200,5 @@ JAZZMIN_UI_TWEAKS = {
     "sidebar_nav_flat_style": False,
     "theme": "darkly",
     "dark_mode_theme": "cyborg",
-    "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary"
-    }
+    "button_classes": {"primary": "btn-primary", "secondary": "btn-secondary"},
 }
